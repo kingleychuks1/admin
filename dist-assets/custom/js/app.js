@@ -1,0 +1,1 @@
+const lorem = 20;

@@ -5,20 +5,20 @@ const babel = require("gulp-babel");
 const uglifyStyle = require("gulp-uglifycss");
 
 function genJs() {
-  return src("./dist-assets/js/*.js")
+  return src("./dist-assets/custom/js/*.js")
     .pipe(babel({
       presets: ['@babel/env']
     }))
     .pipe(src('vendor/*.js'))
     .pipe(rename({ extname: '.js' }))
-    .pipe(dest('./dist-assets/js/min/'));
+    .pipe(dest('./dist-assets/custom/js/min/'));
 }
 
 function uglifyJs() {
-  return src("./dist-assets/js/min/app.js")
+  return src("./dist-assets/custom/js/min/app.js")
     .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))
-    .pipe(dest('./dist-assets/js/min/'));
+    .pipe(dest('./dist-assets/custom/js/min/'));
 }
 
 function uglifycss() {
@@ -33,9 +33,9 @@ function uglifycss() {
 
 
 exports.default = function() {
-  watch("./dist-assets//js/*.js", genJs);
+  watch("./dist-assets/custom/js/*.js", genJs);
 
-  watch("./dist-assets//js/min/app.js", uglifyJs);
+  watch("./dist-assets/custom/js/min/app.js", uglifyJs);
 
-  watch("./dist-assets//css/*.css", uglifycss);
+  watch("./dist-assets/custom/css/*.css", uglifycss);
 }
