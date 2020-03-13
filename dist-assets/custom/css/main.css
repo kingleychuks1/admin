@@ -143,13 +143,39 @@ button:active {
   }
 }
 
-/* @media (min-height: 481px) {
-  .sign-page
-  .left-container{
-    height: 50vh;
-  }
-  .sign-page
-  .right-container{
-    height: 50vh;
-  }
-} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* policies page */
+.custom-policies {
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.04),
+   0 1px 6px rgba(0, 0, 0, 0.04);
+  background: #fff;
+  border-radius: 5px;
+}
+.custom-policies
+.policies-header {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  font-weight: normal!important;
+  font-size: 1.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgb(230, 226, 226);
+}
+.custom-policies
+.policies-content {
+  margin-top: 3rem;
+  /* padding: 5rem; */
+  padding-top: 0rem!important;
+}
