@@ -1,3 +1,5 @@
+const { rmTrailingSlashes } = require("./helpers")
+
 class RouterTable {
 
   constructor() {
@@ -6,32 +8,32 @@ class RouterTable {
   }
   
   get(route, cb) {
-    route = route.replace(/^\/+|\/+$/g, "")
+    route = rmTrailingSlashes(route)
     this._get[route] = cb
   }
 
   put(route, cb) {
-    route = route.replace(/^\/+|\/+$/g, "")
+    route = rmTrailingSlashes(route)
     this._get[route] = cb
   }
 
   post(route, cb) {
-    route = route.replace(/^\/+|\/+$/g, "")
+    route = rmTrailingSlashes(route)
     this._post[route] = cb
   }
 
   delete(route, cb) {
-    route = route.replace(/^\/+|\/+$/g, "")
+    route = rmTrailingSlashes(route)
     this._delete[route] = cb
   }
 
   update(route, cb) {
-    route = route.replace(/^\/+|\/+$/g, "")
+    route = rmTrailingSlashes(route)
     this._update[route] = cb
   }
 
   post(route, cb) {
-    route = route.replace(/^\/+|\/+$/g, "")
+    route = rmTrailingSlashes(route)
     this._update[route] = cb
   }
 }
