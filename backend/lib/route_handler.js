@@ -6,14 +6,14 @@ const route = new Router()
 
 
 route.get("notfound", (req, res) => {
-  res(400, req)
+	res(400, req)
 })
 
 route.post("", (req, res) => {
-  res(200, {
-    hello: "world",
-    payload: req.query
-  })
+	res(200, {
+		hello: "world",
+		payload: req.query
+	})
 })
 
 module.exports = route
