@@ -261,3 +261,105 @@ img {
 
 
 /* announcement page */
+.custom-body table {
+  width: 90%;
+  margin: 0 auto;
+  border: 1px solid rgb(230, 226, 226);
+}
+.custom-body table
+thead th:nth-child(1) {
+  width: 5%;
+}
+.custom-body table
+thead th:nth-child(2) {
+  width: 60%;
+}
+.custom-body table
+thead th:nth-child(3) {
+  width: 15%;
+}
+.custom-body table
+thead th:nth-child(4) {
+  width: 15%;
+}
+.custom-body table
+tbody td, .custom-body table
+thead th {
+  padding: .45rem;
+  border-right: 1px solid rgb(230, 226, 226);
+  border-bottom: 1px solid rgb(230, 226, 226);
+  cursor: pointer;
+}
+.custom-body
+ > .add-remove {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 2rem;
+  display: flex;
+}
+.custom-body
+.add-remove 
+div {
+  margin-left: 1rem;
+}
+.custom-body
+.add-remove 
+span {
+  display: inline-block;
+  font-size: 1.3rem;
+  padding-right: .6rem;
+  padding-left: .6rem;
+  text-align: center;
+  border-radius: 50%;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+.custom-body
+.add-remove 
+span.remove {
+  padding-right: .7rem;
+  padding-left: .7rem;
+}
+
+
+
+
+/* Over the Announcement Page Pop Up */
+.over-page-pop-up.hide {
+  display: none;
+}
+.over-page-pop-up {
+  position: absolute;
+  display: flex;
+  z-index: 1000;
+  min-height: 100vh;
+  min-width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(230, 226, 226, 0.329);
+}
+.over-page-pop-up
+.custom-body {
+  width: 90%;
+  padding-bottom: 3rem;
+}
+.over-page-pop-up
+.custom-body
+button {
+  background: inherit;
+  outline: none;
+  border: none;
+  font-size: 2rem;
+}
+.over-page-pop-up
+.custom-body
+header {
+  display: flex;
+  height: 4rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  padding-top: 1.9rem;
+  border-bottom: 1px solid rgb(230, 226, 226);
+}
