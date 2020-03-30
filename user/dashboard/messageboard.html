@@ -2,17 +2,19 @@
 <html lang="en" dir="">
 
 
-<!-- Mirrored from demos.ui-lib.com/gull/html/layout4/dashboard1.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Mar 2020 12:42:56 GMT -->
+<!-- Mirrored from demos.ui-lib.com/gull/html/layout4/datatables.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Mar 2020 12:46:35 GMT -->
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Dashboard v1 | Gull admin template</title>
+    <title>Datatables | Gull admin template</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet" />
     <link href="../../dist-assets/css/themes/lite-purple.css" rel="stylesheet" />
     <link href="../../dist-assets/css/plugins/perfect-scrollbar.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../dist-assets/css/plugins/fontawesome-5.css" />
     <link href="../../dist-assets/css/plugins/metisMenu.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../dist-assets/css/plugins/datatables.min.css" />
+    <!-- custom stylesheets -->
     <link rel="stylesheet" href="../../dist-assets/custom/css/min/main.min.css">
 </head>
 
@@ -203,144 +205,268 @@
                 </div>
             </header>
             <!-- ============ Body content start ============= -->
-            <div class="main-content pt-3 pb-5 my-5 custom-body">
-                <div class="custom-header">Profile</div>
-                <div class="profile-body">
-                    <div  class="form-card">
-                        <form method="POST">
-                            <div class="form-input">
-                                <label for="memid">Member ID</label>
-                                <input type="text" name="memid" id="memid" contenteditable="false" value="User34590" disabled>
-                            </div>
-                            <div class="form-input">
-                                <label for="memName">Member Name</label>
-                                <input name="memName" id="memName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="userName">User Name</label>
-                                <input name="userName" id="userName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="spendA">Spending Amount</label>
-                                <input id="spendA" name="spendA" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="accPVC">Accumulated PVC</label>
-                                <input id="accPVC" name="accPVC" type="text">
-                            </div>
+            <div class="main-content pt-5 pb-5 my-5 custom-body table-data-format d-relative">
+                <div class="custom-header mb-5">
+									Message
 
-                            <button>Update Profile</button>
-                        </form>
-                    </div>
-
-                    <div  class="form-card">
-                        <div class="mini-header">Contact Info</div>
-                        <form method="POST">
-                            <div class="form-input">
-                                <label for="memid">Phone Number</label>
-                                <input type="text" name="memid" id="memid">
-                            </div>
-                            <div class="form-input">
-                                <label for="memName">Resident Address</label>
-                                <input name="memName" id="memName" type="text">
-                            </div>
-                            <button>Update Info</button>
-                        </form>
-                    </div>
-
-                    <div  class="form-card">
-                        <div class="mini-header">Bank Info</div>
-                        <form method="POST">
-                            <div class="form-input">
-                                <label for="memName">Bank</label>
-                                <input name="memName" id="memName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="userName">Account Name</label>
-                                <input name="userName" id="userName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="spendA">Account No</label>
-                                <input id="spendA" name="spendA" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="accPVC">Branch</label>
-                                <input id="accPVC" name="accPVC" type="text">
-                            </div>
-
-                            <button>Update Bank Info</button>
-                        </form>
-                    </div>
-
-                    <div  class="form-card">
-                        <div class="mini-header">Address</div>
-                        <form method="POST">
-                            <div class="form-input">
-                                <label for="memName">Reciever's Address</label>
-                                <input name="memName" id="memName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="userName">Reciever's Mobile</label>
-                                <input name="userName" id="userName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="spendA">Reciever's Name</label>
-                                <input id="spendA" name="spendA" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="accPVC">ZIP Code</label>
-                                <input id="accPVC" name="accPVC" type="text">
-                            </div>
-
-                            <button>Update Profile</button>
-                        </form>
-                    </div>
-
-                    <div  class="form-card">
-                        <div class="mini-header">Other Info</div>
-                        <form method="POST">
-                            <div class="form-input">
-                                <label for="memName">Bank</label>
-                                <input name="memName" id="memName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="userName">Account Name</label>
-                                <input name="userName" id="userName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="spendA">Account Number</label>
-                                <input id="spendA" name="spendA" type="text">
-                            </div>
-
-                            <button>Update Profile</button>
-                        </form>
-                    </div>
-                </div>
+									<button class="add-message">
+										Add Message
+									</button>
+								</div>
+                <table>
+                    <thead>
+											<tr>
+												<th class="t-w-5">
+														No
+												</th>
+												<th class="t-w-60">
+														Names
+												</th>
+												<th class="t-w-15">
+														Statistics
+												</th>
+												<th class="t-w-15">
+														Date
+												</th>
+											</tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                4
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                5
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                6
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                7
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                8
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                9
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                10
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                11
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                12
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                13
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                14
+                            </td>
+                            <td>
+                                Samuel Omohan
+                            </td>
+                            <td>
+                                3432
+                            </td>
+                            <td>
+                                05/03/2020  16:43:34
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             
-            <!-- ============ Body content End ============= -->
             <div class="sidebar-overlay open"></div><!-- Footer Start -->
             <div class="flex-grow-1"></div>
             <!-- fotter end -->
         </div>
-		</div>
-		<!-- Over the Page Pop up -->
+    </div>
+
+    <!-- Over the Page Pop up -->
     <div class="over-page-pop-up hide">
-			<div class="custom-body">
-					<header>
-							<h3>Title Of Announcements</h3>
-							<button>x</button>
-					</header>
-					<div class="custom-question">
-						<p>Are you sure you want to update profile details?</p>
-						<div class="confirmation-container">
-							<button>Yes</button>
-							<button>No</button>
+        <div class="custom-body">
+            <header>
+                <h3>Title Of Announcements</h3>
+                <button>x</button>
+            </header>
+            <div class="custom-content px-5">
+							<div  class="form-card no-box-shadow">
+								<form method="POST">
+										<div class="form-input">
+												<label for="memName">Member ID</label>
+												<input name="memName" id="memName" type="text">
+										</div>
+										<div class="form-input">
+												<label for="userName">Topic</label>
+												<input name="userName" id="userName" type="text">
+										</div>
+										<div class="form-input">
+												<label for="spendA">Message Content</label>
+												<input id="spendA" name="spendA" type="text">
+										</div>
+
+										<button>Update Profile</button>
+								</form>
+							</div>
 						</div>
-					</div>
-					
         </div>
     </div>
+    <!-- ============ Search UI End ============= -->
     <script src="../../dist-assets/js/plugins/jquery-3.3.1.min.js"></script>
     <script src="../../dist-assets/js/plugins/bootstrap.bundle.min.js"></script>
     <script src="../../dist-assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -351,11 +477,10 @@
     <script src="../../dist-assets/js/plugins/feather.min.js"></script>
     <script src="../../dist-assets/js/plugins/metisMenu.min.js"></script>
     <script src="../../dist-assets/js/scripts/layout-sidebar-vertical.min.js"></script>
-    <script src="../../dist-assets/js/plugins/echarts.min.js"></script>
-    <script src="../../dist-assets/js/scripts/echart.options.min.js"></script>
-    <script src="../../dist-assets/js/scripts/dashboard.v1.script.min.js"></script>
+    <script src="../../dist-assets/js/plugins/datatables.min.js"></script>
+    <script src="../../dist-assets/js/scripts/datatables.script.min.js"></script>
 </body>
 
 
-<!-- Mirrored from demos.ui-lib.com/gull/html/layout4/dashboard1.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Mar 2020 12:43:44 GMT -->
+<!-- Mirrored from demos.ui-lib.com/gull/html/layout4/datatables.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 11 Mar 2020 12:46:36 GMT -->
 </html>
