@@ -14,32 +14,14 @@ th {
 .t-w-10 {
 	width:10%;
 }
+.t-w-13 {
+	width:13%;
+}
 .t-w-15 {
 	width: 15%;
 }
 .t-w-20 {
 	width: 20%;
-}
-.t-w-25 {
-	width: 25%;
-}
-.t-w-30 {
-	width: 30%;
-}
-.t-w-35 {
-	width: 35%;
-}
-.t-w-40 {
-	width: 40%;
-}
-.t-w-45 {
-	width: 45%;
-}
-.t-w-50 {
-	width: 50%;
-}
-.t-w-55 {
-	width: 55%;
 }
 .t-w-60 {
 	width: 60%;
@@ -312,9 +294,6 @@ img {
 /* announcement page */
 .custom-body.table-data-format {
 	overflow-y: auto;
-}
-.table-data-format .custom-header {
-	min-width: 50rem;
 }
 .custom-body.table-data-format table {
 	min-width: 50rem;
