@@ -3,9 +3,13 @@ const { rmTrailingSlashes } = require("./helpers")
 class RouterTable {
 
   constructor() {
-    this._get = this._post = this._put = 
-    this._delete = this._update = this._post = {}
-  }
+		this._get = {}
+		this._post = {}
+		this._put = {}
+		this._delete = {}
+		this._update = {}
+		this._post = {}
+	}
   
   get(route, cb) {
     route = rmTrailingSlashes(route)

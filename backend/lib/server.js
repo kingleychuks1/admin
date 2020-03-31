@@ -39,17 +39,18 @@ function server (req, res) {
 		// eslint-disable-next-line no-undef
 		body = Buffer.concat(body).toString()
 
+		var payload = body.length > 1 ? JSON.parse(body) : {}
+
 		const request = {
 			path,
 			hash,
 			query,
 			method,
 			headers,
-			payload: JSON.parse(body)
+			payload
     }
     
-    var handler = route_handler[`_${method}`][path] || route_handler[`_${method}`].notfound
-
+		var handler = route_handler[`_${method}`][path] || route_handler[`_get`].notfound
 
     handler(request, function(statusCode, payload) {
       statusCode = typeof(statusCode) == "number" ? statusCode : 200
@@ -63,5 +64,6 @@ function server (req, res) {
     })
 	})
 }
+
 
 module.exports = server
