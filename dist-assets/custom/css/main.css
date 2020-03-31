@@ -26,6 +26,21 @@ th {
 .t-w-60 {
 	width: 60%;
 }
+
+.m-w-0 {
+	min-width: 0!important;
+}
+
+.f-w-30 {
+	width: 30%;
+}
+.f-w-17 {
+	width: 17%;
+}
+
+.f-w-100 {
+	width: 100%;
+}
 td:nth-child(1),
 td:nth-child(3),
 td:nth-child(4) {
@@ -503,4 +518,77 @@ button:nth-child(2) {
 	color: white;
 	border: 1px solid #359FE6;
 	border-radius: 4px;
+}
+
+
+.input-content {
+	display: flex;
+	padding: 0 1rem;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+.input-content
+.input {
+	min-width: 16rem;
+	margin: .5rem 0rem;
+}
+.input-content
+.input input {
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid #2B751F;
+	padding: .4rem;
+	border-radius: 4px;
+}
+
+.input-content
+.input select {
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid #2B751F;
+	padding: .4rem;
+	border-radius: 4px;
+}
+.button-content {
+	width: 94%;
+	margin: 0 auto;
+	margin-top: 1rem;
+}
+.button-content
+button {
+	width: 7rem;
+	padding: .2rem;
+	background: #2B751F;
+	border: 1px solid #2B751F;
+	border-radius: 4px;
+	color: white;
+	margin-right: 1rem;
+}
+
+.product-flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+.product-flex
+.right-side {
+	width: 30%;
+	margin-top: 2.5rem;
+}
+.product-flex
+.left-side {
+	width: 70%;
+}
+.product-flex
+.button-content {
+	margin-left: 1rem;
+}
+@media (max-width: 750px) {
+	.product-flex
+	.left-side {
+		width: 100%;
+	}
+	.product-flex
+	.right-side {
+		width: 100%;
+	}
 }
