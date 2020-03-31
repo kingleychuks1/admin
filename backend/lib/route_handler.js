@@ -1,7 +1,7 @@
 const Router = require("./RouterTable")
 const DataLib = require("./datalib")
 
-const dataLib = new DataLib("../db")
+const dataLib = new DataLib("../../database")
 const route = new Router()
 
 
