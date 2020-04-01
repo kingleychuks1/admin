@@ -1,4 +1,8 @@
-class Helper {
+/**
+ * todo - create a function that handles async http
+ */
+
+class Helpers {
 
 	rmTrailingSlashes(string) {
 		return string.replace(/^\/+|\/+$/g, "")
@@ -67,7 +71,17 @@ class Helper {
 
 		return result;
 	}
+
+	/**
+	 * 
+	 * @param {Object} header contains the headers of the request
+	 * @param {Object} body contains body of the request
+	 * @param {String} method http method `post` `get` `put` `delete`
+	 */
+	async httprequest(header, body, method) {
+
+	}
 }
 
 
-module.exports = new Helper()
+module.exports = new Helpers()
