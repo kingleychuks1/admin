@@ -74,7 +74,7 @@ route.post("/member/", (req, res) => {
 			}
 		}
 
-		dataLib.createNewRecord("members", memid, content, function(err) {
+		dataLib.create("members", memid, content, function(err) {
 			if(!err) {
 				res(200, content)
 			} else {

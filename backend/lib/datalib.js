@@ -23,7 +23,7 @@ class DataLib {
    * @param {Function} cb Sends one argument called which is an instance of Error
    * if there was an error and null if no error was found
    */
-  createNewRecord(collection, document, content, cb) {
+  create(collection, document, content, cb) {
     fs.open(this.BASE_DIR + "/" + collection + "/" + document + ".json", "wx", function (err, fileDescription) {
       if(!err && fileDescription) {
         var jsonContent = JSON.stringify(content)
