@@ -2,16 +2,7 @@ const url = require("url")
 const route_handler = require("./route_handler")
 
 
-function server (req, res) {
-  	/**
-   * TODO: Read request
-   *     - Collect URL
-   *     - Collect PATH
-   *     - Determine METHOD
-   *     - Collect PAYLOAD if any
-   *     - Breakdown GET url
-  */
-
+function server(req, res) {
 	var _url = url.parse(req.url, true)
 
 	// removes first and last slashes
@@ -30,11 +21,11 @@ function server (req, res) {
 	req.on("error", (err) => {
 		console.error(err)
 	})
-	
+
 	req.on("data", (chunk) => {
 		body.push(chunk)
 	})
-	
+
 	req.on("end", () => {
 		// eslint-disable-next-line no-undef
 		body = Buffer.concat(body).toString()
@@ -49,19 +40,20 @@ function server (req, res) {
 			headers,
 			body
 		}
-    
+
+
 		var handler = route_handler[`_${method}`][path] || route_handler[`_get`].notfound
 
-    handler(request, function(statusCode, payload) {
-      statusCode = typeof(statusCode) == "number" ? statusCode : 200
-      payload = typeof(payload) == "object" ? payload : {}
+		handler(request, function (statusCode, payload) {
+			statusCode = typeof (statusCode) == "number" ? statusCode : 200
+			payload = typeof (payload) == "object" ? payload : {}
 
-      payload = JSON.stringify(payload)
+			payload = JSON.stringify(payload)
 
-      res.setHeader("content-type", "application/json")
-      res.writeHead(statusCode)
-      res.end(payload)
-    })
+			res.setHeader("content-type", "application/json")
+			res.writeHead(statusCode)
+			res.end(payload)
+		})
 	})
 }
 

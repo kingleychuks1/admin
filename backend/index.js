@@ -13,9 +13,9 @@ const HTTP_PORT = 2001
  * @param res contains a `response` object
 */
 const server = http.createServer((req, res) => {
-  serverLogic(req, res)
+	serverLogic(req, res)
 })
 
 server.listen(HTTP_PORT, () => {
-  console.log(`http://localhost:${HTTP_PORT}`)
+	console.log(`http://localhost:${HTTP_PORT}`)
 })

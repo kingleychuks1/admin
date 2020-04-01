@@ -1,19 +1,39 @@
-const Router = require("./RouterTable")
+const Router = require("./routetable")
 const DataLib = require("./datalib")
+const helpers = require("./helpers")
 
-const dataLib = new DataLib("../../database")
+
+
+const datalib = new DataLib("../../database")
 const route = new Router()
 
 
+/***
+ * 
+ * Users Route Handler
+ * 
+*/
+
 route.get("notfound", (req, res) => {
-	res(400, {"not found": "not found"})
+	res(400, { "not found": "not found" })
 })
 
 /**
  * Retrieves a user from the database
  */
 route.get("/member/", (req, res) => {
-	res(200, "Returns User")
+	var memid = typeof req.params.memid == "string" ? req.params.memid : ""
+
+	datalib.read("members", memid, function (err, content) {
+		if (err || !content) {
+			res(400, {
+				status: "1",
+				error: "Haha! You Fucked Up"
+			})
+		} else {
+			res(200, content)
+		}
+	})
 })
 
 /**
@@ -23,7 +43,7 @@ route.post("/member/", (req, res) => {
 	var fname = typeof req.body.fname == "string" ? req.body.fname : false
 	var lname = typeof req.body.lname == "string" ? req.body.lname : false
 	var mname = typeof req.body.mname == "string" ? req.body.mname : false
-	var memid = typeof req.body.memid == "string" ? req.body.memid : false
+	var memid = "member" + helpers.randomCharacter(6, "num");
 	var email = typeof req.body.email == "string" ? req.body.email : false
 	var telno = typeof req.body.telno == "string" ? req.body.telno : false
 	var accno = typeof req.body.accno == "string" ? req.body.accno : false
@@ -32,7 +52,7 @@ route.post("/member/", (req, res) => {
 	var country = typeof req.body.country == "string" ? req.body.country : false
 	var address = typeof req.body.address == "string" ? req.body.address : false
 
-	
+
 	var bankname = typeof req.body.bankname == "string" ? req.body.bankname : false
 
 	var sfname = typeof req.body.sfname == "string" ? req.body.sfname : false
@@ -47,10 +67,10 @@ route.post("/member/", (req, res) => {
 
 
 	var isArgValid = accname && country && address && fname && lname && mname && memid && email
-	&& telno && accno && sfname && slname && smemid && saccno && saccname && 
-	saddress && sbankname && bankname
+		&& telno && accno && sfname && slname && smemid && saccno && saccname &&
+		saddress && sbankname && bankname
 
-	if(isArgValid) {
+	if (isArgValid) {
 		var content = {
 			first_name: fname,
 			last_name: lname,
@@ -74,8 +94,8 @@ route.post("/member/", (req, res) => {
 			}
 		}
 
-		dataLib.create("members", memid, content, function(err) {
-			if(!err) {
+		datalib.create("/members/", memid, content, function (err) {
+			if (!err) {
 				res(200, content)
 			} else {
 				res(500, {
@@ -98,15 +118,95 @@ route.post("/member/", (req, res) => {
  * Updates an already existing member
  */
 route.put("/member/", (req, res) => {
-	res(200, "Create User")
+	var memid = typeof req.body.memid == "string" ? req.body.memid : false
+	var fname = typeof req.body.fname == "string" ? req.body.fname : false
+	var lname = typeof req.body.lname == "string" ? req.body.lname : false
+	var mname = typeof req.body.mname == "string" ? req.body.mname : false
+	var email = typeof req.body.email == "string" ? req.body.email : false
+	var telno = typeof req.body.telno == "string" ? req.body.telno : false
+	var accno = typeof req.body.accno == "string" ? req.body.accno : false
+
+	var accname = typeof req.body.accname == "string" ? req.body.accname : false
+	var country = typeof req.body.country == "string" ? req.body.country : false
+	var address = typeof req.body.address == "string" ? req.body.address : false
+
+
+	var bankname = typeof req.body.bankname == "string" ? req.body.bankname : false
+
+	datalib.read("members", memid, function (err, content) {
+		if (!err && content) {
+			if (fname) {
+				content.first_name = fname
+			}
+			if (lname) {
+				content.last_name = lname
+			}
+			if (mname) {
+				content.middle_name = mname
+			}
+			if (email) {
+				content.email = email
+			}
+			if (telno) {
+				content.phone_number = telno
+			}
+			if (accno) {
+				content.account_number = accno
+			}
+			if (accname) {
+				content.account_name = accname
+			}
+			if (country) {
+				content.country = country
+			}
+			if (address) {
+				content.address = address
+			}
+			if (bankname) {
+				content.bank_name = bankname
+			}
+
+			datalib.update("members", memid, content, function (err) {
+				if (err) {
+					res(500, {
+						status: "2",
+						error: "Sorry, I Fucked Up"
+					})
+				} else {
+					res(200, content)
+				}
+			})
+		} else {
+			res(400, {
+				status: "1",
+				error: "Haha! You Fucked Up"
+			})
+		}
+	})
+
 })
 
+
+
+
 /**
- * Deletes an already existing member
- */
-route.delete("/member/", (req, res) => {
-	res(200, "Create User")
-})
+ * 
+ * Products Route Handlers
+ * 
+*/
+
+
+
+
+
+
+
+
+/**
+ * 
+ * Orders Route Handlers
+ * 
+*/
 
 
 module.exports = route
