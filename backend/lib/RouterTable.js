@@ -35,11 +35,6 @@ class RouterTable {
     route = rmTrailingSlashes(route)
     this._update[route] = cb
   }
-
-  post(route, cb) {
-    route = rmTrailingSlashes(route)
-    this._update[route] = cb
-  }
 }
 
 module.exports = RouterTable

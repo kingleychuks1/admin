@@ -19,36 +19,36 @@ function server (req, res) {
 
 	var hash = _url.hash
 
-	var query = _url.query
+	var params = _url.query
 
 	var method = req.method.toLowerCase()
 
 	var headers = req.headers
 
-	var body = []
+	let body = []
 
 	req.on("error", (err) => {
 		console.error(err)
 	})
-  
+	
 	req.on("data", (chunk) => {
 		body.push(chunk)
 	})
-
+	
 	req.on("end", () => {
 		// eslint-disable-next-line no-undef
 		body = Buffer.concat(body).toString()
 
-		var payload = body.length > 1 ? JSON.parse(body) : {}
+		body = body.length > 1 ? JSON.parse(body) : {}
 
 		const request = {
 			path,
 			hash,
-			query,
+			params,
 			method,
 			headers,
-			payload
-    }
+			body
+		}
     
 		var handler = route_handler[`_${method}`][path] || route_handler[`_get`].notfound
 
