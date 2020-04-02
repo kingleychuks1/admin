@@ -2,6 +2,9 @@
  * todo - create a function that handles async http
  */
 
+ 
+const https = require('https')
+
 class Helpers {
 
 	rmTrailingSlashes(string) {
@@ -70,16 +73,6 @@ class Helpers {
 		}
 
 		return result;
-	}
-
-	/**
-	 * 
-	 * @param {Object} header contains the headers of the request
-	 * @param {Object} body contains body of the request
-	 * @param {String} method http method `post` `get` `put` `delete`
-	 */
-	async httprequest(header, body, method) {
-
 	}
 }
 

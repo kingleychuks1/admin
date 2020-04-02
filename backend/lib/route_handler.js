@@ -1,6 +1,7 @@
 const Router = require("./routetable")
 const DataLib = require("./datalib")
 const helpers = require("./helpers")
+const axios = require("axios")
 
 const datalib = new DataLib("../../database")
 const route = new Router()
@@ -71,6 +72,17 @@ route.get("/member/", async (req, res) => {
  * Creates a new member
  */
 route.post("/member/", async (req, res) => {
+
+	var response = await axios({
+		method: 'get',
+		url: 'http://localhost:2001/token',
+		token_id: req.headers.token_id,
+		responseType: 'stream'
+	})
+
+	console.log(response)
+
+
 	var fname = typeof req.body.fname == "string" ? req.body.fname : false
 	var lname = typeof req.body.lname == "string" ? req.body.lname : false
 	var mname = typeof req.body.mname == "string" ? req.body.mname : false
