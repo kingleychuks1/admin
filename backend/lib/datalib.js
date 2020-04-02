@@ -121,6 +121,11 @@ class DataLib {
 		})
 	}
 
+	/**
+	 * 
+	 * @param {String} collection Collection Name
+	 * @returns {Array} Array of document
+	 */
 	read_all_sync(collection) {
 		var path = this.BASE_DIR + "/" + collection
 
@@ -129,7 +134,24 @@ class DataLib {
 		var datas = []
 
 		files.forEach((document) => {
-			datas.push(fs.readFileSync(path + "/" + document, "utf8"))
+			datas.push(JSON.parse(fs.readFileSync(path + "/" + document, "utf8")))
+		})
+
+		return datas
+	}
+
+	/**
+	 * 
+	 * @param {String} collection collection name
+	 * @param {Array} files array containing file names
+	 */
+	read_files_sync(collection, files) {
+		var path = this.BASE_DIR + "/" + collection
+
+		var datas = []
+
+		files.forEach((document) => {
+			datas.push(JSON.parse(fs.readFileSync(path + "/" + document + ".json", "utf8")))
 		})
 
 		return datas

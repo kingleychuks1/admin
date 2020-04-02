@@ -68,7 +68,6 @@ route.get("/member/", async (req, res) => {
 	}
 })
 
-
 /**
  * Creates a new member
  */
@@ -131,12 +130,36 @@ route.post("/member/", async (req, res) => {
 				bank_name: sbankname,
 				account_number: saccno,
 				account_name: saccname
-			}
+			},
+			sponsored_members: []
 		}
 
-		datalib.create("/members/", memid, content, function (err) {
+		datalib.create("/members/", memid, content, async function (err) {
 			if (!err) {
-				res(200, content)
+				const member = await axios({
+					method: 'get',
+					headers: {
+						token_id: req.headers.token_id
+					},
+					url: host + "/member"
+				})
+
+				member.data.sponsored_members = Array.isArray(member.data.sponsored_members) ? member.data.sponsored_members : []
+
+				console.log(member.data.sponsored_members)
+
+				member.data.sponsored_members.push(content.member_id)
+
+				datalib.update("/members/", smemid, member.data, function (err) {
+					if (err) {
+						res(500, {
+							status: "2",
+							error: "Sorry, I Fucked Up"
+						})
+					} else {
+						res(200, member.data)
+					}
+				})
 			} else {
 				res(500, {
 					status: "2",
@@ -164,7 +187,6 @@ route.put("/member/", async (req, res) => {
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
 	var memid = typeof response.data.member_id == "string" ? response.data.member_id : false
-
 
 	var fname = typeof req.body.fname == "string" ? req.body.fname : false
 	var lname = typeof req.body.lname == "string" ? req.body.lname : false
@@ -243,6 +265,77 @@ route.put("/member/", async (req, res) => {
 		})
 	}
 
+})
+
+/**
+ * Updates an already existing member
+ */
+route.get("/sponsored_members", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var isArgValid = member_id && token_is_valid
+
+
+	if (isArgValid) {
+		datalib.read("members", member_id, function (err, document) {
+			if (!err) {
+				const sponsored_members = datalib.read_files_sync("members", document.sponsored_members)
+
+				res(200, sponsored_members)
+			} else {
+				res(500, {
+					status: "2",
+					error: "Sorry, I Fucked Up",
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
+
+/**
+ * 
+ * Members Route Handler
+ * 
+*/
+route.get("members", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var isArgValid = member_id && token_is_valid
+
+	if (isArgValid) {
+		var collection = datalib.read_all_sync("members")
+
+		if (collection) {
+			collection.forEach((document) => {
+				delete document.password
+			})
+			res(200, collection)
+		} else {
+			res(500, {
+				status: "2",
+				error: "Sorry, I Fucked Up",
+			})
+		}
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
 })
 
 
@@ -365,8 +458,8 @@ route.post("auth", async (req, res) => {
 				data.password = typeof data.password == "string" ? data.password : ""
 				const password = await bcrypt.compare(passwd, data.password)
 
- 
-				if(password) {
+
+				if (password) {
 					const token = await axios({
 						method: 'post',
 						url: host + "/token",
@@ -375,7 +468,7 @@ route.post("auth", async (req, res) => {
 						}
 					})
 
-					if(token) {
+					if (token) {
 						res(200, token.data)
 					} else {
 						res(500, {
@@ -421,9 +514,9 @@ route.post("auth", async (req, res) => {
 route.post("reset", (req, res) => {
 	var member_id = typeof req.body.memid == "string" ? req.body.memid : false
 
-	if(member_id) {
-		datalib.read("members", member_id, async function(err, data) {
-			if(err) {
+	if (member_id) {
+		datalib.read("members", member_id, async function (err, data) {
+			if (err) {
 				res(500, {
 					status: "2",
 					error: "Sorry, I Fucked Up",
@@ -432,9 +525,9 @@ route.post("reset", (req, res) => {
 			} else {
 				var password = helpers.randomCharacter(6, "alpha-num-sym")
 				data.password = await bcrypt.hash(password, SALTROUNDS)
-				
-				datalib.update("members", member_id, data, async function(err) {
-					if(err) {
+
+				datalib.update("members", member_id, data, async function (err) {
+					if (err) {
 						res(500, {
 							status: "2",
 							error: "Sorry, I Fucked Up",
@@ -480,15 +573,15 @@ route.post("product", async (req, res) => {
 
 
 	var isArgValid = product && price && pv && token_is_valid && (member_id == "administrator")
-	
+
 	if (isArgValid) {
 		const content = {
 			product,
-			price, 
+			price,
 			pv
 		}
-		datalib.create("products", product, content, function(err) {
-			if(err) {
+		datalib.create("products", product, content, function (err) {
+			if (err) {
 				res(500, {
 					status: "2",
 					error: "Sorry, I Fucked Up",
@@ -519,10 +612,10 @@ route.delete("product", async (req, res) => {
 	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
 
 	var isArgValid = token_is_valid && (member_id == "administrator")
-	
-	if(isArgValid) {
-		datalib.delete("products", product, function(err) {
-			if(!err) {
+
+	if (isArgValid) {
+		datalib.delete("products", product, function (err) {
+			if (!err) {
 				res(200, {
 					product
 				})
@@ -543,7 +636,7 @@ route.delete("product", async (req, res) => {
 
 
 /**
- * retrive product product
+ * retreive product product
  */
 route.get("product", async (req, res) => {
 	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
@@ -554,7 +647,7 @@ route.get("product", async (req, res) => {
 
 	var isArgValid = member_id && token_is_valid
 
-	if(isArgValid) {
+	if (isArgValid) {
 		var collection = datalib.read_all_sync("products")
 
 		if (collection) {
@@ -583,6 +676,24 @@ route.get("product", async (req, res) => {
  * Orders Route Handlers
  * 
 */
+route.post("order", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var isArgValid = member_id && token_is_valid
+
+	if (isArgValid) {
+		
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
 
 
 module.exports = route
