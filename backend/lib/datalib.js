@@ -120,6 +120,20 @@ class DataLib {
 			}
 		})
 	}
+
+	read_all_sync(collection) {
+		var path = this.BASE_DIR + "/" + collection
+
+		var files = fs.readdirSync(path)
+
+		var datas = []
+
+		files.forEach((document) => {
+			datas.push(fs.readFileSync(path + "/" + document, "utf8"))
+		})
+
+		return datas
+	}
 }
 
 

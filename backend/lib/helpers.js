@@ -7,6 +7,10 @@ const https = require('https')
 
 class Helpers {
 
+	async sendMessage(message) {
+		return message
+	}
+
 	rmTrailingSlashes(string) {
 		return string.replace(/^\/+|\/+$/g, "")
 	}

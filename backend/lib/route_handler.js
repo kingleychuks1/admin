@@ -6,16 +6,14 @@ const axios = require("axios")
 const datalib = new DataLib("../../database")
 const route = new Router()
 
+
 const host = "http://localhost:2001/"
 const bcrypt = require('bcrypt');
 const SALTROUNDS = 10;
 
 
 /**
- * todo - add async token authentication to all functions
  * todo - create a orders - post - get
- * todo - create a products - post - get - delete
- * todo - referral link - post - put - get 
  * todo - create ewallet - post - put - get
  * todo - create announcement - post - delete - get
  * todo - create message - post - delete - get - put
@@ -366,6 +364,7 @@ route.post("auth", async (req, res) => {
 			if (!err && data) {
 				data.password = typeof data.password == "string" ? data.password : ""
 				const password = await bcrypt.compare(passwd, data.password)
+
  
 				if(password) {
 					const token = await axios({
@@ -411,14 +410,168 @@ route.post("auth", async (req, res) => {
 
 
 
+/**
+ * 
+ * Reset Password Route Handler
+ * 
+*/
+/**
+ * resets password
+ */
+route.post("reset", (req, res) => {
+	var member_id = typeof req.body.memid == "string" ? req.body.memid : false
+
+	if(member_id) {
+		datalib.read("members", member_id, async function(err, data) {
+			if(err) {
+				res(500, {
+					status: "2",
+					error: "Sorry, I Fucked Up",
+					user: false
+				})
+			} else {
+				var password = helpers.randomCharacter(6, "alpha-num-sym")
+				data.password = await bcrypt.hash(password, SALTROUNDS)
+				
+				datalib.update("members", member_id, data, async function(err) {
+					if(err) {
+						res(500, {
+							status: "2",
+							error: "Sorry, I Fucked Up",
+						})
+					} else {
+						data.password = password
+						res(200, data)
+					}
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
+
+
+
+
 
 /**
  * 
  * Products Route Handler
  * 
 */
+/**
+ * creates and updates product
+ */
+route.post("product", async (req, res) => {
+	var product = typeof req.body.product == "string" ? req.body.product : false
+	var price = typeof req.body.price == "number" ? req.body.price : false
+	var pv = typeof req.body.pv == "number" ? req.body.pv : false
+
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
 
 
+	var isArgValid = product && price && pv && token_is_valid && (member_id == "administrator")
+	
+	if (isArgValid) {
+		const content = {
+			product,
+			price, 
+			pv
+		}
+		datalib.create("products", product, content, function(err) {
+			if(err) {
+				res(500, {
+					status: "2",
+					error: "Sorry, I Fucked Up",
+				})
+			} else {
+				res(200, content)
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
+
+/**
+ * delete product
+ */
+route.delete("product", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var product = typeof req.body.product == "string" ? req.body.product : false
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var isArgValid = token_is_valid && (member_id == "administrator")
+	
+	if(isArgValid) {
+		datalib.delete("products", product, function(err) {
+			if(!err) {
+				res(200, {
+					product
+				})
+			} else {
+				res(500, {
+					status: "2",
+					error: "Sorry, I Fucked Up",
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
+
+/**
+ * retrive product product
+ */
+route.get("product", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var isArgValid = member_id && token_is_valid
+
+	if(isArgValid) {
+		var collection = datalib.read_all_sync("products")
+
+		if (collection) {
+			res(200, collection)
+		} else {
+			res(500, {
+				status: "2",
+				error: "Sorry, I Fucked Up",
+			})
+		}
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
 
 
 
