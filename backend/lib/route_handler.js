@@ -6,13 +6,15 @@ const axios = require("axios")
 const datalib = new DataLib("../../database")
 const route = new Router()
 
+const host = "http://localhost:2001/"
+const bcrypt = require('bcrypt');
+const SALTROUNDS = 10;
+
 
 /**
  * todo - add async token authentication to all functions
  * todo - create a orders - post - get
  * todo - create a products - post - get - delete
- * todo - create user authentication - post
- * todo - password - post - put
  * todo - referral link - post - put - get 
  * todo - create ewallet - post - put - get
  * todo - create announcement - post - delete - get
@@ -68,20 +70,17 @@ route.get("/member/", async (req, res) => {
 	}
 })
 
+
 /**
  * Creates a new member
  */
 route.post("/member/", async (req, res) => {
 
-	var response = await axios({
-		method: 'get',
-		url: 'http://localhost:2001/token',
-		token_id: req.headers.token_id,
-		responseType: 'stream'
-	})
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
 
-	console.log(response)
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
+	var smemid = typeof response.data.member_id == "string" ? response.data.member_id : false
 
 	var fname = typeof req.body.fname == "string" ? req.body.fname : false
 	var lname = typeof req.body.lname == "string" ? req.body.lname : false
@@ -100,7 +99,6 @@ route.post("/member/", async (req, res) => {
 
 	var sfname = typeof req.body.sfname == "string" ? req.body.sfname : false
 	var slname = typeof req.body.slname == "string" ? req.body.slname : false
-	var smemid = typeof req.body.smemid == "string" ? req.body.smemid : false
 	var saccno = typeof req.body.saccno == "string" ? req.body.saccno : false
 
 	var saccname = typeof req.body.saccname == "string" ? req.body.saccname : false
@@ -111,7 +109,7 @@ route.post("/member/", async (req, res) => {
 
 	var isArgValid = accname && country && address && fname && lname && mname && memid && email
 		&& telno && accno && sfname && slname && smemid && saccno && saccname &&
-		saddress && sbankname && bankname
+		saddress && sbankname && bankname && token_is_valid
 
 	if (isArgValid) {
 		var content = {
@@ -126,6 +124,7 @@ route.post("/member/", async (req, res) => {
 			account_number: accno,
 			account_name: accname,
 			country: country,
+			password: await bcrypt.hash("12345678", SALTROUNDS),
 			sponsor_details: {
 				first_name: sfname,
 				last_name: slname,
@@ -161,13 +160,22 @@ route.post("/member/", async (req, res) => {
  * Updates an already existing member
  */
 route.put("/member/", async (req, res) => {
-	var memid = typeof req.body.memid == "string" ? req.body.memid : false
+
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var memid = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+
 	var fname = typeof req.body.fname == "string" ? req.body.fname : false
 	var lname = typeof req.body.lname == "string" ? req.body.lname : false
 	var mname = typeof req.body.mname == "string" ? req.body.mname : false
 	var email = typeof req.body.email == "string" ? req.body.email : false
 	var telno = typeof req.body.telno == "string" ? req.body.telno : false
 	var accno = typeof req.body.accno == "string" ? req.body.accno : false
+
+	var passwd = typeof req.body.passwd == "string" ? req.body.passwd : false
 
 	var accname = typeof req.body.accname == "string" ? req.body.accname : false
 	var country = typeof req.body.country == "string" ? req.body.country : false
@@ -176,56 +184,66 @@ route.put("/member/", async (req, res) => {
 
 	var bankname = typeof req.body.bankname == "string" ? req.body.bankname : false
 
-	datalib.read("members", memid, function (err, content) {
-		if (!err && content) {
-			if (fname) {
-				content.first_name = fname
-			}
-			if (lname) {
-				content.last_name = lname
-			}
-			if (mname) {
-				content.middle_name = mname
-			}
-			if (email) {
-				content.email = email
-			}
-			if (telno) {
-				content.phone_number = telno
-			}
-			if (accno) {
-				content.account_number = accno
-			}
-			if (accname) {
-				content.account_name = accname
-			}
-			if (country) {
-				content.country = country
-			}
-			if (address) {
-				content.address = address
-			}
-			if (bankname) {
-				content.bank_name = bankname
-			}
-
-			datalib.update("members", memid, content, function (err) {
-				if (err) {
-					res(500, {
-						status: "2",
-						error: "Sorry, I Fucked Up"
-					})
-				} else {
-					res(200, content)
+	if (token_is_valid) {
+		datalib.read("members", memid, async function (err, content) {
+			if (!err && content) {
+				if (fname) {
+					content.first_name = fname
 				}
-			})
-		} else {
-			res(400, {
-				status: "1",
-				error: "Haha! You Fucked Up"
-			})
-		}
-	})
+				if (lname) {
+					content.last_name = lname
+				}
+				if (mname) {
+					content.middle_name = mname
+				}
+				if (email) {
+					content.email = email
+				}
+				if (telno) {
+					content.phone_number = telno
+				}
+				if (accno) {
+					content.account_number = accno
+				}
+				if (accname) {
+					content.account_name = accname
+				}
+				if (country) {
+					content.country = country
+				}
+				if (address) {
+					content.address = address
+				}
+				if (bankname) {
+					content.bank_name = bankname
+				}
+				if (passwd) {
+					content.password = await bcrypt.hash(passwd, SALTROUNDS)
+				}
+
+				datalib.update("members", memid, content, function (err) {
+					if (err) {
+						res(500, {
+							status: "2",
+							error: "Sorry, I Fucked Up"
+						})
+					} else {
+						res(200, content)
+					}
+				})
+			} else {
+				res(400, {
+					status: "1",
+					error: "Haha! You Fucked Up"
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up"
+		})
+	}
 
 })
 
@@ -277,7 +295,7 @@ route.post("token", async (req, res) => {
  * return user token
  */
 route.get("token", async (req, res) => {
-	var token_id = typeof req.headers.token_id == "string" ? req.headers.token_id : false
+	var token_id = typeof req.params.token_id == "string" ? req.params.token_id : false
 
 	if (token_id) {
 		datalib.read("tokens", token_id, function (err, token) {
@@ -334,10 +352,71 @@ route.put("token", async (req, res) => {
 
 /**
  * 
- * Products Route Handlers
+ * Sign In Handler
  * 
 */
+route.post("auth", async (req, res) => {
+	var memid = typeof req.body.memid == "string" ? req.body.memid : false
+	var passwd = typeof req.body.passwd == "string" ? req.body.passwd : false
 
+	var isArgValid = memid && passwd
+
+	if (isArgValid) {
+		datalib.read("members", memid, async function (err, data) {
+			if (!err && data) {
+				data.password = typeof data.password == "string" ? data.password : ""
+				const password = await bcrypt.compare(passwd, data.password)
+ 
+				if(password) {
+					const token = await axios({
+						method: 'post',
+						url: host + "/token",
+						data: {
+							memid
+						}
+					})
+
+					if(token) {
+						res(200, token.data)
+					} else {
+						res(500, {
+							status: "2",
+							error: "Sorry, I Fucked Up",
+							user: false
+						})
+					}
+
+				} else {
+					res(400, {
+						status: "1",
+						error: "Haha! You Fucked Up",
+					})
+				}
+			} else {
+				res(400, {
+					status: "1",
+					error: "Haha! You Fucked Up",
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up"
+		})
+	}
+})
+
+
+
+
+
+
+/**
+ * 
+ * Products Route Handler
+ * 
+*/
 
 
 
