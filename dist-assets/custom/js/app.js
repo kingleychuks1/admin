@@ -1,1 +1,2 @@
-const lorem = 20;
+const API = "http://localhost:2001/"
+
