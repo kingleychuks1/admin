@@ -661,14 +661,121 @@ route.get("product", async (req, res) => {
 
 
 /**
- * todo - create a orders - post - get
  * todo - create ewallet - post - put - get
  */
 /**
  * 
  * Orders Route Handlers
  * 
- */
+*/
+route.post("order", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var order_id = helpers.randomCharacter(10, "num")
+	var type = typeof req.body.type == "string" ? req.body.type : false
+	var amount = typeof req.body.amount == "string"? req.body.amount :false
+	var pv = typeof req.body.pv == "string"? req.body.pv : false
+	var quantity = typeof req.body.quantity == "string"? req.body.quantity : false
+	var status = "pending"
+
+	var isArgValid = token_is_valid && amount && order_id && type && pv && member_id && quantity && status
+
+	if(isArgValid) {
+		var content = {
+			member_id,
+			order_id,
+			type,
+			amount,
+			pv,
+			quantity,
+			status
+		}
+
+		datalib.create("orders", order_id, content, function(err) {
+			if(!err) {
+				res(200, content)
+			} else {
+				res(500, {
+					status: "2",
+					error: "Sorry, I Fucked Up",
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
+route.get("orders", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var isArgValid = member_id && token_is_valid
+
+	if (isArgValid) {
+		var orders = datalib.read_all_sync("orders")
+
+		res(200, orders)
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
+route.put("order", async (req, res) => {
+	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+
+	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
+
+	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
+
+	var order_id = typeof req.body.order_id == "string" ? req.body.order_id : false
+
+	var isArgValid = token_is_valid && member_id && order_id
+
+	if (isArgValid) {
+		datalib.read("orders", order_id, function(err, data) {
+			if(!err && data) {
+
+				data.status = "resolved"
+
+				datalib.update("orders", order_id, data, function(err) {
+					if(!err) {
+						res(200, data)
+					} else {
+						res(500, {
+							status: "2",
+							error: "Sorry, I Fucked Up",
+						})
+					}
+				})
+			} else {
+				res(400, {
+					status: "1",
+					error: "Haha! You Fucked Up",
+				})
+			}
+		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	}
+})
+
 
 
 
