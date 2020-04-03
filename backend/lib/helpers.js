@@ -1,10 +1,3 @@
-/**
- * todo - create a function that handles async http
- */
-
- 
-const https = require('https')
-
 class Helpers {
 
 	async sendMessage(message) {
@@ -77,6 +70,27 @@ class Helpers {
 		}
 
 		return result;
+	}
+
+	/**
+	 * 
+	 * @param {Date} date a date object
+	 * @returns {Object.date}
+	 * @returns {Object.month}
+	 * @returns {Object.year}
+	 * @returns {Object.hours}
+	 * @returns {Object.minutes}
+	 * @returns {Object.seconds}
+	 */
+	getDate(date) {
+		return {
+			date: date.getDate(),
+			Month: date.getMonth() + 1,
+			Year: date.getFullYear(),
+			hours: date.getHours(),
+			minutes: date.getMinutes(),
+			seconds: date.getSeconds()
+		}
 	}
 }
 
