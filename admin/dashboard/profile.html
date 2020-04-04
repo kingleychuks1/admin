@@ -145,14 +145,14 @@
                             </div>
                             <div class="form-input">
                                 <label for="spendA">Spending Amount</label>
-                                <input id="spendA" name="spendA" type="text">
+                                <input id="spendA" name="spendA" type="text" disabled>
                             </div>
                             <div class="form-input">
                                 <label for="accPVC">Accumulated PVC</label>
-                                <input id="accPVC" name="accPVC" type="text">
+                                <input id="accPVC" name="accPVC" type="text" disabled>
                             </div>
 
-                            <button>Update Profile</button>
+                            <button id="updateProfile" type="button">Update Profile</button>
                         </form>
                     </div>
 
@@ -165,9 +165,9 @@
                             </div>
                             <div class="form-input">
                                 <label for="memName">Resident Address</label>
-                                <input name="memName" id="memName" type="address">
+                                <input name="memName" id="address" type="text">
                             </div>
-                            <button>Update Info</button>
+                            <button id="updateContact" type="button">Update Info</button>
                         </form>
                     </div>
 
@@ -176,22 +176,18 @@
                         <form method="POST">
                             <div class="form-input">
                                 <label for="memName">Bank</label>
-                                <input name="memName" id="memName" type="bankname">
+                                <input name="memName" id="bankname" type="text">
                             </div>
                             <div class="form-input">
                                 <label for="userName">Account Name</label>
-                                <input name="userName" id="userName" type="accname">
+                                <input name="userName" id="aname" type="text">
                             </div>
                             <div class="form-input">
                                 <label for="spendA">Account No</label>
-                                <input id="spendA" name="spendA" type="accno">
-                            </div>
-                            <div class="form-input">
-                                <label for="accPVC">Branch</label>
-                                <input id="accPVC" name="accPVC" type="text">
+                                <input id="accno" name="accno" type="text">
                             </div>
 
-                            <button>Update Bank Info</button>
+                            <button id="updateBank" type="button">Update Bank Info</button>
                         </form>
                     </div>
 
@@ -200,42 +196,22 @@
                         <form method="POST">
                             <div class="form-input">
                                 <label for="memName">Reciever's Address</label>
-                                <input name="memName" id="memName" type="text">
+                                <input name="memName" id="radd" type="text">
                             </div>
                             <div class="form-input">
                                 <label for="userName">Reciever's Mobile</label>
-                                <input name="userName" id="userName" type="text">
+                                <input name="" id="rmobile" type="text">
                             </div>
                             <div class="form-input">
                                 <label for="spendA">Reciever's Name</label>
-                                <input id="spendA" name="spendA" type="text">
+                                <input id="rname" name="rname" type="text">
                             </div>
                             <div class="form-input">
-                                <label for="accPVC">ZIP Code</label>
-                                <input id="accPVC" name="accPVC" type="text">
+                                <label for="accPVC">Country</label>
+                                <input id="zip" name="accPVC" type="text">
                             </div>
 
-                            <button>Update Profile</button>
-                        </form>
-                    </div>
-
-                    <div  class="form-card">
-                        <div class="mini-header">Other Info</div>
-                        <form method="POST">
-                            <div class="form-input">
-                                <label for="memName">Bank</label>
-                                <input name="memName" id="memName" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="userName">Account Name</label>
-                                <input name="" id="" type="text">
-                            </div>
-                            <div class="form-input">
-                                <label for="spendA">Account Number</label>
-                                <input id="spendA" name="spendA" type="text">
-                            </div>
-
-                            <button>Update Profile</button>
+                            <button id="updateAddress" type="button">Update Address</button>
                         </form>
                     </div>
                 </div>
@@ -246,11 +222,85 @@
 		</div>
 		<script src="../../dist-assets/custom/js/app.js"></script>
 		<script>
-			async function make() {
-				console.log(await tokenHandler())
+			async function makeProfile() {
+				var user = await tokenHandler()
+
+				load(user)
 			}
 
-			make()
+			document.querySelector("#updateProfile").onclick = async function updateProfile () {
+				var data = {}
+				data.fname = document.querySelector(".form-input input#fname").value 
+				data.lname = document.querySelector(".form-input input#lname").value
+			
+				data = await createOrUpdateUser(data, "update")
+
+				load(data)
+			}
+
+			document.querySelector("#updateContact").onclick = async function updateContact () {
+				var data = {}
+
+				data.telno = document.querySelector(".form-input input#telno").value
+				data.address = document.querySelector(".form-input input#address").value
+
+				data = await createOrUpdateUser(data, "update")
+
+				load(data)
+			}
+
+			document.querySelector("#updateBank").onclick = async function updateBank () {
+				let data = {}
+
+				data.bankname = document.querySelector(".form-input input#bankname").value
+				data.accname = document.querySelector(".form-input input#aname").value
+				data.accno = document.querySelector(".form-input input#accno").value
+
+				data = await createOrUpdateUser(data, "update")
+
+				load(data)
+			}
+
+			document.querySelector("#updateAddress").onclick = async function updateInfo () {
+				let data = {}
+
+				data.reciever = {}
+
+				data.reciever.address = document.querySelector(".form-input input#radd").value
+				data.reciever.mobile = document.querySelector(".form-input input#rmobile").value
+				data.reciever.name = document.querySelector(".form-input input#rname").value
+				data.reciever.zip = document.querySelector(".form-input input#zip").value
+
+
+				data = await createOrUpdateUser(data, "update")
+
+				load(data)
+			}
+
+
+			function load(data) {
+				document.querySelector(".form-input input#memid").value = data.member_id
+				document.querySelector(".form-input input#fname").value = data.first_name
+				document.querySelector(".form-input input#lname").value = data.last_name
+				document.querySelector(".form-input input#spendA").value = data.spend_amount || 0
+				document.querySelector(".form-input input#accPVC").value = data.point_value || 0
+				
+				document.querySelector(".form-input input#telno").value = data.phone_number
+				document.querySelector(".form-input input#address").value = data.address
+
+				document.querySelector(".form-input input#bankname").value = data.bank_name
+				document.querySelector(".form-input input#aname").value = data.account_name
+				document.querySelector(".form-input input#accno").value = data.account_number
+
+				data.reciever = data.reciever || {}
+
+				document.querySelector(".form-input input#radd").value = data.reciever.address || data.address
+				document.querySelector(".form-input input#rmobile").value = data.reciever.mobile || data.phone_number
+				document.querySelector(".form-input input#rname").value = data.reciever.name || data.first_name + " " + data.middle_name + " " + data.last_name
+				document.querySelector(".form-input input#zip").value = data.reciever.zip || data.country
+			}
+
+			makeProfile()
 		</script>
 		<!-- Over the Page Pop up -->
     <div class="over-page-pop-up hide">

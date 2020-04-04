@@ -190,7 +190,6 @@ route.post("/member/", async (req, res) => {
  * Updates an already existing member
  */
 route.put("/member/", async (req, res) => {
-
 	let response
 	
 	try {
@@ -221,6 +220,8 @@ route.put("/member/", async (req, res) => {
 
 
 	var bankname = typeof req.body.bankname == "string" ? req.body.bankname : false
+
+	var reciever = typeof req.body.reciever == "object" ? req.body.reciever : false
 
 	if (token_is_valid) {
 		datalib.read("members", memid, async function (err, content) {
@@ -257,6 +258,9 @@ route.put("/member/", async (req, res) => {
 				}
 				if (passwd) {
 					content.password = await bcrypt.hash(passwd, SALTROUNDS)
+				}
+				if (reciever) {
+					content.reciever = reciever
 				}
 
 				datalib.update("members", memid, content, function (err) {

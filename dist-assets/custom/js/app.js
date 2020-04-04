@@ -52,11 +52,13 @@ async function createOrUpdateUser(data, type) {
 		}
 
 		var user = await fetch(url, {
-			method: "PUT",
+			method: "put",
 			body: JSON.stringify(data)
 		})
 
 		user = await user.json()
+
+		//console.log(user)
 
 		return user
 	} else {
