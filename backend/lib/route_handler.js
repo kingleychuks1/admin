@@ -32,7 +32,7 @@ route.get("notfound", async (req, res) => {
  * Retrieves a user from the database
  */
 route.get("/member/", async (req, res) => {
-	var token_id = typeof req.headers.token_id == "string" ? req.headers.token_id : false
+	var token_id = typeof req.params.token_id == "string" ? req.params.token_id : false
 
 
 	if (token_id) {
@@ -69,17 +69,17 @@ route.get("/member/", async (req, res) => {
  * Creates a new member
  */
 route.post("/member/", async (req, res) => {
-
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
 			error: "Haha! You Fucked Up",
 		})
-	} 
+		return
+	}
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -140,22 +140,28 @@ route.post("/member/", async (req, res) => {
 			sponsored_members: []
 		}
 
-		datalib.create("/members/", memid, content, async function (err) {
+		datalib.create("/members", memid, content, async function (err) {
 			if (!err) {
-				const member = await axios({
-					method: 'get',
-					headers: {
-						token_id: req.headers.token_id
-					},
-					url: host + "/member"
-				})
+				let member
+				try {
+					member = await axios({
+						method: 'get',
+						url: host + "/member/?token_id=" + req.params.token_id
+					})
+				} catch (err) {
+					res(400, {
+						status: "1",
+						error: "Haha! You Fucked Up"
+					})
+					return
+				}
 
 				member.data.sponsored_members = Array.isArray(member.data.sponsored_members) ? member.data.sponsored_members : []
-
 
 				member.data.sponsored_members.push(content.member_id)
 
 				datalib.update("/members/", smemid, member.data, function (err) {
+
 					if (err) {
 						res(500, {
 							status: "2",
@@ -172,8 +178,6 @@ route.post("/member/", async (req, res) => {
 				})
 			}
 		})
-
-
 	} else {
 		res(400, {
 			status: "1",
@@ -190,7 +194,7 @@ route.put("/member/", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -288,7 +292,7 @@ route.get("/sponsored_members", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -334,7 +338,7 @@ route.get("members", async (req, res) => {
 	let response
 
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -598,7 +602,7 @@ route.post("product", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -645,7 +649,7 @@ route.delete("product", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -690,7 +694,7 @@ route.get("product", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -738,7 +742,7 @@ route.post("order", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -791,7 +795,7 @@ route.get("orders", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -821,7 +825,7 @@ route.put("order", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -883,7 +887,7 @@ route.post("announcement", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -935,7 +939,7 @@ route.get("announcement", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -985,7 +989,7 @@ route.get("announcements", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -1015,7 +1019,7 @@ route.delete("announcement", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -1066,7 +1070,7 @@ route.post("message", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -1118,7 +1122,7 @@ route.get("message", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -1168,7 +1172,7 @@ route.get("messages", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",
@@ -1198,7 +1202,7 @@ route.delete("message", async (req, res) => {
 	let response
 	
 	try {
-		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
 	} catch (err) {
 		res(400, {
 			status: "1",

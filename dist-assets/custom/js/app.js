@@ -4,11 +4,7 @@ async function authenticate(memid, passwd) {
 	memid = typeof memid == "string" && memid.length >= 12 ? memid : false
 	passwd = typeof passwd == "string" && passwd.length >= 6 ? passwd : false
 
-	console.log(memid, passwd)
-
 	var isArgValid = memid && passwd
-
-	console.log(isArgValid)
 
 	var body = {
 			memid,
@@ -30,6 +26,25 @@ async function authenticate(memid, passwd) {
 	}
 }
 
-function throwError() {
+async function createOrUpdateUser(data, type) {
+	if(type == "create" && data) {
+		var user = await fetch(API + "/member/?token_id=" + localStorage.getItem("token_id"), {
+			method: "post",
+			body: JSON.stringify(data)
+		})
+
+		console.log(user)
+
+		user = await user.json()
+
+		return user
+	} else if(type == "update" && data) {
+
+	} else {
+		// throw error
+	}
+}
+
+function throwError(contents) {
 
 }

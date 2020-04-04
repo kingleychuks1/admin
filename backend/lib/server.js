@@ -45,7 +45,6 @@ function server(req, res) {
 			body
 		}
 
-
 		var handler = route_handler[`_${method}`][path] || route_handler[`_get`].notfound
 
 		handler(request, function (statusCode, payload) {
@@ -56,7 +55,7 @@ function server(req, res) {
 
 			headers = {
 				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+				'Access-Control-Allow-Methods': 'PUT, DELETE, POST, GET',
 				'Access-Control-Max-Age': 2592000,
 				"content-type": "application/json"
 			}

@@ -48,7 +48,7 @@
 
 			localStorage.setItem("token_id", token.token_id)
 			
-			if(localStorage.member_id == "administrator") {
+			if(token.member_id == "administrator") {
 				window.location.href = "/admin/dashboard/addmember.html"
 			} else {
 				window.location.href = "/user/dashboard/addmember.html"
