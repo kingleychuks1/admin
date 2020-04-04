@@ -1,36 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up | A Step Towards Making the Right Decision</title>
-  <link rel="stylesheet" href="./dist-assets/custom/css/min/main.min.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sign Up | A Step Towards Making the Right Decision</title>
+	<link rel="stylesheet" href="./dist-assets/custom/css/min/main.min.css">
 </head>
+
 <body>
 
-  <section class="sign-page">
-    <div class="left-container">
-      <div class="image-container">
-        <img src="./dist-assets/custom/images/undraw_active_options_8je6-removebg-preview.png" />
-      </div>
-    </div>
-    <div class="right-container">
-      <div class="sign-content">
-        <div class="sign-header">
-          <div class="sign-colored">Welcome on board!</div>
-          <div class="sign-text">Let's get to know you</div>
-        </div>
-        <div class="sign-body">
-          <input type="text" placeholder="Username">
-          <input type="password" placeholder="Password">
+	<section class="sign-page">
+		<div class="left-container">
+			<div class="image-container">
+				<img src="./dist-assets/custom/images/undraw_active_options_8je6-removebg-preview.png" />
+			</div>
+		</div>
+		<div class="right-container">
+			<div class="sign-content">
+				<div class="sign-header">
+					<div class="sign-colored">Welcome on board!</div>
+					<div class="sign-text">Let's get to know you</div>
+				</div>
+				<div class="sign-body">
+					<input type="text" placeholder="Username">
+					<input type="password" placeholder="Password">
+					<button>
+						Sign Up
+					</button>
+				</div>
+			</div>
+		</div>
+	</section>
 
-          <button>
-            Sign Up
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-  
+	<script src="./dist-assets/custom/js/app.js"></script>
+	<script>
+		var button = document.querySelector(".sign-body button")
+
+		button.onclick = async function () {
+			var username = document.querySelector(".sign-body input[type='text']").value
+			var password = document.querySelector(".sign-body input[type='password']").value
+
+			username = username.replace(/ /g, '')
+			password = password.replace(/ /g, '')
+
+			var token = await authenticate(username, password)
+
+			localStorage.setItem("token_id", token.token_id)
+			
+			if(localStorage.member_id == "administrator") {
+				window.location.href = "/admin/dashboard/addmember.html"
+			} else {
+				window.location.href = "/user/dashboard/addmember.html"
+			}
+		}
+
+
+		//async function userSubmit() {
+		//	await authenticate("administrator", "samuelo")
+		//}
+		//userSubmit();
+	</script>
+
 </body>
+
 </html>

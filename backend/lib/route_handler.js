@@ -152,7 +152,6 @@ route.post("/member/", async (req, res) => {
 
 				member.data.sponsored_members = Array.isArray(member.data.sponsored_members) ? member.data.sponsored_members : []
 
-				console.log(member.data.sponsored_members)
 
 				member.data.sponsored_members.push(content.member_id)
 
@@ -485,14 +484,14 @@ route.post("auth", async (req, res) => {
 
 	var isArgValid = memid && passwd
 
+
 	if (isArgValid) {
 		datalib.read("members", memid, async function (err, data) {
 			if (!err && data) {
 				data.password = typeof data.password == "string" ? data.password : ""
-				const password = await bcrypt.compare(passwd, data.password)
+				const validPassword = await bcrypt.compare(passwd, data.password)
 
-
-				if (password) {
+				if (validPassword) {
 					const token = await axios({
 						method: 'post',
 						url: host + "/token",
@@ -510,7 +509,6 @@ route.post("auth", async (req, res) => {
 							user: false
 						})
 					}
-
 				} else {
 					res(400, {
 						status: "1",
@@ -566,7 +564,6 @@ route.post("reset", (req, res) => {
 							error: "Sorry, I Fucked Up",
 						})
 					} else {
-						data.password = password
 						res(200, data)
 					}
 				})

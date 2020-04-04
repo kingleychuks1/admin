@@ -30,7 +30,11 @@ function server(req, res) {
 		// eslint-disable-next-line no-undef
 		body = Buffer.concat(body).toString()
 
-		body = body.length > 1 ? JSON.parse(body) : {}
+		try {
+			body = body.length > 1 ? JSON.parse(body) : {}
+		} catch(err) {
+			body = {}
+		}
 
 		const request = {
 			path,
@@ -50,8 +54,14 @@ function server(req, res) {
 
 			payload = JSON.stringify(payload)
 
-			res.setHeader("content-type", "application/json")
-			res.writeHead(statusCode)
+			headers = {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+				'Access-Control-Max-Age': 2592000,
+				"content-type": "application/json"
+			}
+
+			res.writeHead(statusCode, headers)
 			res.end(payload)
 		})
 	})
