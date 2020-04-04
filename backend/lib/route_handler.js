@@ -34,6 +34,7 @@ route.get("notfound", async (req, res) => {
 route.get("/member/", async (req, res) => {
 	var token_id = typeof req.headers.token_id == "string" ? req.headers.token_id : false
 
+
 	if (token_id) {
 		datalib.read("tokens", token_id, function (err, token) {
 			var isExpired = token.creation_time - Date.now() > 0 ? false : true;
@@ -56,6 +57,11 @@ route.get("/member/", async (req, res) => {
 				})
 			}
 		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up"
+		})
 	}
 })
 
@@ -64,7 +70,16 @@ route.get("/member/", async (req, res) => {
  */
 route.post("/member/", async (req, res) => {
 
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -173,7 +188,16 @@ route.post("/member/", async (req, res) => {
  */
 route.put("/member/", async (req, res) => {
 
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -262,7 +286,16 @@ route.put("/member/", async (req, res) => {
  * Updates an already existing member
  */
 route.get("/sponsored_members", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -299,7 +332,16 @@ route.get("/sponsored_members", async (req, res) => {
  * 
 */
 route.get("members", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -556,7 +598,16 @@ route.post("product", async (req, res) => {
 	var price = typeof req.body.price == "number" ? req.body.price : false
 	var pv = typeof req.body.pv == "number" ? req.body.pv : false
 
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -594,7 +645,16 @@ route.post("product", async (req, res) => {
  * delete product
  */
 route.delete("product", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var product = typeof req.body.product == "string" ? req.body.product : false
 
@@ -630,7 +690,16 @@ route.delete("product", async (req, res) => {
  * retreive product product
  */
 route.get("product", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -669,8 +738,16 @@ route.get("product", async (req, res) => {
  * 
 */
 route.post("order", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
-
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
 	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
@@ -714,7 +791,16 @@ route.post("order", async (req, res) => {
 })
 
 route.get("orders", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -735,7 +821,16 @@ route.get("orders", async (req, res) => {
 })
 
 route.put("order", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -788,7 +883,16 @@ route.put("order", async (req, res) => {
  * 
 */
 route.post("announcement", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -831,7 +935,16 @@ route.post("announcement", async (req, res) => {
 })
 
 route.get("announcement", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -872,7 +985,16 @@ route.get("announcement", async (req, res) => {
 })
 
 route.get("announcements", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -893,7 +1015,16 @@ route.get("announcements", async (req, res) => {
 })
 
 route.delete("announcement", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -935,7 +1066,16 @@ route.delete("announcement", async (req, res) => {
  * 
 */
 route.post("message", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -978,7 +1118,16 @@ route.post("message", async (req, res) => {
 })
 
 route.get("message", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -1019,7 +1168,16 @@ route.get("message", async (req, res) => {
 })
 
 route.get("messages", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -1040,7 +1198,16 @@ route.get("messages", async (req, res) => {
 })
 
 route.delete("message", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
