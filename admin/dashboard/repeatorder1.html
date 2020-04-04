@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" dir="">
 
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Personal ssSales Accumulated Bonus</title>
+    <title>Add repeat order</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet" />
     <link href="../../dist-assets/css/themes/lite-purple.css" rel="stylesheet" />
     <link href="../../dist-assets/css/plugins/perfect-scrollbar.css" rel="stylesheet" />
@@ -41,7 +40,7 @@
                             </li>
                             <li class="Ul_li--hover"><a class="has-arrow" href="#"><i class=" text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Member Profile</span></a>
                                 <ul class="mm-collapse">
-                                   <li class="item-name"><a href="profile.html"><i class="nav-icon "></i><span class="item-name">Profile</span></a></li>
+                                    <li class="item-name"><a href="profile.html"><i class="nav-icon "></i><span class="item-name">Profile</span></a></li>
                                     <li class="item-name"><a href="mbpassword.html"><i class="nav-icon "></i><span class="item-name">Password</span></a></li>
                                     <li class="item-name"><a href="loaders.html"><i class="nav-icon "></i><span class="item-name">Referral Link</span></a></li>
                                 </ul>
@@ -49,7 +48,7 @@
                             <li class="Ul_li--hover"><a class="has-arrow" href="#"><i class=" text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Message Board</span></a>
                                 <ul class="mm-collapse">
                                     <li class="item-name"><a href="announcement.html"><i class="nav-icon "></i><span class="item-name">Company Announcement</span></a></li>
-                                    <li class="item-name"><a href="invoice.html"><i class="nav-icon "></i><span class="item-name">Message</span></a></li>
+                                    <li class="item-name"><a href="messageboard.html"><i class="nav-icon "></i><span class="item-name">Message</span></a></li>
                                     
                                 </ul>
                             </li>
@@ -131,106 +130,266 @@
             <!-- ============ Body content start ============= -->
             <div class="main-content pt-5 pb-5 my-5 custom-body  table-data-format d-relative">
                 <div class="custom-header mb-5">
-									Personal Sales Accumulated Bonus
+									Add Repeat Order
 
-								</div>
+				</div>
+
+				<div class="container">
+					<div class="row">
+						<div class="col-5">
+							Delivery type
+						</div>
+						<div class="col-7">
+							<label for=""><input type="radio" value="" >Logistics Dellivery</label>
+							<label for="" style="margin-left: 5px"><input type="radio" value="" >Pick Up</label>
+						</div>
+						<div class="col-5" style="margin-top: 10px">
+							Country
+						</div>
+						<div class="col-7" style="margin-top: 10px">
+							<select name="" class="form-control" datatype="*" id="order-country">
+					      	
+					      		<option value="">Nigeria</option>
+					      </select>
+						</div>
+						<div class="col-5" style="margin-top: 10px">
+							Provice/state
+						</div>
+						<div class="col-7" style="margin-top: 10px">
+							<select name="" class="form-control" datatype="*" id="order-country">
+					      	
+					      		<option value="">Nigeria</option>
+					      </select>
+						</div>
+						<div class="col-5" style="margin-top: 10px">
+							Receiver address
+						</div>
+						<div class="col-7" style="margin-top: 10px">
+							<input type="text" name="" class="form-control">
+						</div>
+						<div class="col-5" style="margin-top: 10px">
+							Collect from head office
+						</div>
+						<div class="col-7" style="margin-top: 10px">
+							
+								<label for=""><input type="radio" value="" >Yes</label>
+							<label for="" style="margin-left: 5px"><input type="radio" value="" >No</label>
+							
+						</div>
+						<div class="col-5" style="margin-top: 10px">
+							Delivery Center
+						</div>
+						<div class="col-7" style="margin-top: 10px">
+							<select name="" class="form-control" datatype="*" id="order-country">
+					      	
+					      		<option value="">Nigeria</option>
+					      </select>
+						</div>
+						<div class="col-5" style="margin-top: 10px">
+							Receiver Name
+						</div>
+						<div class="col-7" style="margin-top: 10px">
+							<input type="text" name="" class="form-control">
+						</div>
+						<div class="col-5" style="margin-top: 10px; margin-bottom: 20px">
+							Receiver Mobile
+						</div>
+						<div class="col-7" style="margin-top: 10px; margin-bottom: 20px">
+							<input type="number" name="" class="form-control">
+						</div>
+					</div>
+				</div>
+
                 <table>
                     <thead>
 											<tr>
 												<th class="t-w-5">
-														No
+														Product Code
 												</th>
-												<th class="t-w-15">
-														Member ID
+												<th class="t-w-13">
+														Product Name
 												</th>
-												<th class="t-w-15">
-														Member Name
+												<th class="t-w-13">
+														Price (NGN)
 												</th>
-												<th class="t-w-15">
-														Total Ppv
+												<th class="t-w-13">
+														PV($)
 												</th>
-												<th class="t-w-15">
-													Date
+												<th class="t-w-13">
+													Freight Charges
+													(NGN)
 												</th>
-												<th class="t-w-15">
-													Sponsor Name
+												<th class="t-w-13">
+													Purchase Quantity
 												</th>
-												<th class="t-w-15">
-													Sponsor ID
+												<th class="t-w-13">
+													Amount(NGN)
+												</th>
+												<th class="t-w-13">
+													Freight Amount
+													(NGN)
+												</th>
+												<th class="t-w-13">
+													PV($)
 												</th>
 											</tr>
                     </thead>
                     <tbody class="text-center">
                         <tr>
 													<td>
-														1
+															00
 													</td>
 													<td>
+														Name of product
 													</td>
 													<td>
+														1493
 													</td>
 													<td>
+														2.1
 													</td>
 													<td>
+														0
 													</td>
 													<td>
+														<input name="purchaseqty" value="0">
 													</td>
 													<td>
+														0
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+															
+														0
 													</td>
 												</tr>
 												<tr>
 													<td>
-														2
+															16
 													</td>
 													<td>
+														Name of product
 													</td>
 													<td>
+														1400
 													</td>
 													<td>
+														2.1
 													</td>
 													<td>
+														0
 													</td>
 													<td>
+														<input name="purchaseqty" value="0">
 													</td>
 													<td>
+														0
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+															
+														0
 													</td>
 												</tr>
 												<tr>
 													<td>
-														3
+															1
 													</td>
 													<td>
+														Name of product 
 													</td>
 													<td>
+														478
 													</td>
 													<td>
+														5
 													</td>
 													<td>
+														0
 													</td>
 													<td>
+														<input name="purchaseqty" value="0">
 													</td>
 													<td>
+														0
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+															
+														0
 													</td>
 												</tr>
 												<tr>
 													<td>
-														4
+															00
 													</td>
 													<td>
+														Name of product
 													</td>
 													<td>
+														2424
 													</td>
 													<td>
+														16
 													</td>
 													<td>
+														0
 													</td>
 													<td>
+														<input name="purchaseqty" value="0">
 													</td>
 													<td>
+														0
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+															
+														0
 													</td>
 												</tr>
+												<tr>
+													<td>
+															16
+													</td>
+													<td>
+														Name of product
+													</td>
+													<td>
+														4000
+													</td>
+													<td>
+														14
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+														<input name="purchaseqty" value="0">
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+														0
+													</td>
+													<td>
+															
+														0
+													</td>
+												</tr>
+												
+												
                     </tbody>
                 </table>
+                <button class="btn btn-primary mt-3" style="margin-left: 60px">Submit</button>
             </div>
             
             <div class="sidebar-overlay open"></div><!-- Footer Start -->
@@ -239,35 +398,7 @@
         </div>
     </div>
 
-    <!-- Over the Page Pop up -->
-    <div class="over-page-pop-up hide">
-        <div class="custom-body">
-            <header>
-                <h3>Title Of Announcements</h3>
-                <button>x</button>
-            </header>
-            <div class="custom-content px-5">
-							<div  class="form-card no-box-shadow">
-								<form method="POST">
-										<div class="form-input">
-												<label for="memName">Member ID</label>
-												<input name="memName" id="memName" type="text">
-										</div>
-										<div class="form-input">
-												<label for="userName">Topic</label>
-												<input name="userName" id="userName" type="text">
-										</div>
-										<div class="form-input">
-												<label for="spendA">Message Content</label>
-												<input id="spendA" name="spendA" type="text">
-										</div>
-
-										<button>Update Profile</button>
-								</form>
-							</div>
-						</div>
-        </div>
-    </div>
+    
     <!-- ============ Search UI End ============= -->
     <script src="../../dist-assets/js/plugins/jquery-3.3.1.min.js"></script>
     <script src="../../dist-assets/js/plugins/bootstrap.bundle.min.js"></script>
