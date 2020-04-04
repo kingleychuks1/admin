@@ -12,7 +12,9 @@ function server(req, res) {
 
 	var params = _url.query
 
-	var method = req.method.toLowerCase()
+	var method = req.headers['access-control-request-method']
+
+	method = typeof method == "string"? method.toLowerCase() : "get"
 
 	var headers = req.headers
 

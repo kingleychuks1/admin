@@ -22,29 +22,82 @@ async function authenticate(memid, passwd) {
 		return token
 
 	} else {
-		//throw error to user
+		throwError("Please Enter a Valid Member ID or Password")
 	}
 }
 
 async function createOrUpdateUser(data, type) {
 	if(type == "create" && data) {
-		var user = await fetch(API + "/member/?token_id=" + localStorage.getItem("token_id"), {
+		let url
+		try {
+			url = API + "/member/?token_id=" + localStorage.getItem("token_id")
+		} catch (err) {
+			return null
+		}
+
+		var user = await fetch(url, {
 			method: "post",
 			body: JSON.stringify(data)
 		})
-
-		console.log(user)
 
 		user = await user.json()
 
 		return user
 	} else if(type == "update" && data) {
+		let url
+		try {
+			url = API + "/member/?token_id=" + localStorage.getItem("token_id")
+		} catch (err) {
+			return null
+		}
 
+		var user = await fetch(url, {
+			method: "PUT",
+			body: JSON.stringify(data)
+		})
+
+		user = await user.json()
+
+		return user
 	} else {
-		// throw error
+		throwError("Invalid data")
+	}
+}
+
+async function tokenHandler() {
+	let token_id
+	try {
+		token_id = localStorage.getItem("token_id")
+	} catch (err) {
+		return null
+	}
+
+	var user = await fetch(API + "/member/?token_id=" + token_id, {
+		method: "get"
+	})
+
+	user = await user.json()
+
+	return user
+	
+}
+
+async function checkUserAuth() {
+	var user = await tokenHandler()
+
+	console.log("authenticated")
+
+	if (user) {
+		return
+	} else {
+		console.log("unauthenticated")
+		window.location.href = "/signin.html"
 	}
 }
 
 function throwError(contents) {
 
 }
+
+
+checkUserAuth()

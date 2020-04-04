@@ -106,7 +106,6 @@
             </div>
             <!--  side-nav-close -->
         </div>
-        <div class="switch-overlay"></div>
         <div class="main-content-wrap mobile-menu-content bg-off-white m-0">
             <header class="main-header bg-white d-flex justify-content-between p-2">
                 <div class="header-toggle">
@@ -137,12 +136,12 @@
                                 <input type="text" name="memid" id="memid" contenteditable="false" value="User34590" disabled>
                             </div>
                             <div class="form-input">
-                                <label for="memName">Member Name</label>
-                                <input name="memName" id="memName" type="text">
+                                <label for="memName">First Name</label>
+                                <input name="memName" id="fname" type="text">
                             </div>
                             <div class="form-input">
-                                <label for="userName">User Name</label>
-                                <input name="userName" id="userName" type="text">
+                                <label for="userName">Last Name</label>
+                                <input name="userName" id="lname" type="text">
                             </div>
                             <div class="form-input">
                                 <label for="spendA">Spending Amount</label>
@@ -162,11 +161,11 @@
                         <form method="POST">
                             <div class="form-input">
                                 <label for="memid">Phone Number</label>
-                                <input type="text" name="memid" id="memid">
+                                <input type="text" name="memid" id="telno">
                             </div>
                             <div class="form-input">
                                 <label for="memName">Resident Address</label>
-                                <input name="memName" id="memName" type="text">
+                                <input name="memName" id="memName" type="address">
                             </div>
                             <button>Update Info</button>
                         </form>
@@ -177,15 +176,15 @@
                         <form method="POST">
                             <div class="form-input">
                                 <label for="memName">Bank</label>
-                                <input name="memName" id="memName" type="text">
+                                <input name="memName" id="memName" type="bankname">
                             </div>
                             <div class="form-input">
                                 <label for="userName">Account Name</label>
-                                <input name="userName" id="userName" type="text">
+                                <input name="userName" id="userName" type="accname">
                             </div>
                             <div class="form-input">
                                 <label for="spendA">Account No</label>
-                                <input id="spendA" name="spendA" type="text">
+                                <input id="spendA" name="spendA" type="accno">
                             </div>
                             <div class="form-input">
                                 <label for="accPVC">Branch</label>
@@ -229,7 +228,7 @@
                             </div>
                             <div class="form-input">
                                 <label for="userName">Account Name</label>
-                                <input name="userName" id="userName" type="text">
+                                <input name="" id="" type="text">
                             </div>
                             <div class="form-input">
                                 <label for="spendA">Account Number</label>
@@ -241,13 +240,18 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- ============ Body content End ============= -->
-            <div class="sidebar-overlay open"></div><!-- Footer Start -->
             <div class="flex-grow-1"></div>
             <!-- fotter end -->
         </div>
 		</div>
+		<script src="../../dist-assets/custom/js/app.js"></script>
+		<script>
+			async function make() {
+				console.log(await tokenHandler())
+			}
+
+			make()
+		</script>
 		<!-- Over the Page Pop up -->
     <div class="over-page-pop-up hide">
 			<div class="custom-body">
@@ -262,7 +266,6 @@
 							<button>No</button>
 						</div>
 					</div>
-					
         </div>
     </div>
     <script src="../../dist-assets/js/plugins/jquery-3.3.1.min.js"></script>
