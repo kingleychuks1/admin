@@ -173,75 +173,64 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                <a href="#" data-toggle="modal"data-target="#verifyModalContent1" data-whatever="@fat">TOpic goes here, click on this to see full content on modal</a>
-                            </td>
-                            <td>
-                                3432
-                            </td>
-                            <td>
-                                05/03/2020  16:43:34
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                Topic goes here
-                            </td>
-                            <td>
-                                3432
-                            </td>
-                            <td>
-                                05/03/2020  16:43:34
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                3
-                            </td>
-                            <td>
-                                Topic goes here
-                            </td>
-                            <td>
-                                3432
-                            </td>
-                            <td>
-                                05/03/2020  16:43:34
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                4
-                            </td>
-                            <td>
-                                Topic goes here
-                            </td>
-                            <td>
-                                3432
-                            </td>
-                            <td>
-                                05/03/2020  16:43:34
-                            </td>
-                        </tr>                  </tbody>
+                                     
+										</tbody>
                 </table>
                 <div class="add-remove">
                     
                     <div><span class="add">+</span> Add</div>
-                    <div><span class="remove">-</span> Remove</div>
+                    <!--<div><span class="remove">-</span> Remove</div>-->
                 </div>
             </div>
             
-            <div class="sidebar-overlay open"></div><!-- Footer Start -->
             <div class="flex-grow-1"></div>
             <!-- fotter end -->
         </div>
-    </div>
+		</div>
+		<script src="../../dist-assets/custom/js/app.js"></script>
+		<script>
+			async function render() {
+				var response = await getRequest("announcements")
+				
+				load(response)
+			}
+
+			function load(data) {
+				tbody = document.querySelector("tbody")
+
+				var body = ""
+
+				for (var i = 0; i < data.length; i++) {
+					body += `<tr>
+											<td>
+													${i + 1}
+											</td>
+											<td>
+													<a href="#" data-toggle="modal" data-target="#verifyModalContent1" onclick="loadToggle(${data[i].announcement_id})" data-whatever="@fat">${data[i].body}</a>
+											</td>
+											<td>
+													${data[i].statistics}
+											</td>
+											<td>
+													${data[i].date.date + "/" + data[i].date.month + "/" + data[i].date.year + " " + data[i].date.hours + ":" + data[i].date.minutes + ":" + data[i].date.seconds }
+											</td>
+									</tr>`
+				}
+
+				tbody.innerHTML = body
+			}
+
+			async function loadToggle(announcement_id) {
+				var announcement = await getRequest("announcement?announcement_id=" + announcement_id)
+
+				document.querySelector(".modal-body p").innerHTML = announcement.body
+				document.querySelector(".modal-title").innerHTML = announcement.title
+
+				render()
+			}
+
+			render()
+		</script>
 
     <!-- Over the Page Pop up -->
     <div class="over-page-pop-up hide">
@@ -251,40 +240,8 @@
                 <button>x</button>
             </header>
             <div class="custom-content px-5">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt accusamus distinctio veritatis sint laboriosam fugiat quibusdam, dignissimos sed, consectetur cumque eligendi? Ipsum, fugiat est voluptates labore ipsam accusantium quia! Aspernatur!
-
-            <br>
-            <br>
-
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Non in rerum alias! Ut alias reiciendis eum voluptas dignissimos quo, facilis explicabo placeat maxime minus expedita soluta ipsam perspiciatis suscipit dolore?
-
-            <br>
-            <br>
-
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente, exercitationem libero sequi blanditiis quaerat nam doloremque voluptatum enim unde. Nobis?
-        
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt accusamus distinctio veritatis sint laboriosam fugiat quibusdam, dignissimos sed, consectetur cumque eligendi? Ipsum, fugiat est voluptates labore ipsam accusantium quia! Aspernatur!
-
-            <br>
-            <br>
-
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Non in rerum alias! Ut alias reiciendis eum voluptas dignissimos quo, facilis explicabo placeat maxime minus expedita soluta ipsam perspiciatis suscipit dolore?
-
-            <br>
-            <br>
-
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt accusamus distinctio veritatis sint laboriosam fugiat quibusdam, dignissimos sed, consectetur cumque eligendi? Ipsum, fugiat est voluptates labore ipsam accusantium quia! Aspernatur!
-
-            <br>
-            <br>
-
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Non in rerum alias! Ut alias reiciendis eum voluptas dignissimos quo, facilis explicabo placeat maxime minus expedita soluta ipsam perspiciatis suscipit dolore?
-
-            <br>
-            <br>
-
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt accusamus distinctio veritatis sint laboriosam fugiat quibusdam, dignissimos sed, consectetur cumque eligendi? Ipsum, fugiat est voluptates labore ipsam accusantium quia! Aspernatur!
-            </div>
+								
+						</div>
         </div>
     </div>
     <!-- ============ Search UI End ============= -->

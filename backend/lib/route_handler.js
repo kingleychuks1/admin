@@ -32,7 +32,8 @@ route.get("notfound", async (req, res) => {
  * Retrieves a user from the database
  */
 route.get("/member/", async (req, res) => {
-	var token_id = typeof req.headers.token_id == "string" ? req.headers.token_id : false
+	var token_id = typeof req.params.token_id == "string" ? req.params.token_id : false
+
 
 	if (token_id) {
 		datalib.read("tokens", token_id, function (err, token) {
@@ -56,6 +57,11 @@ route.get("/member/", async (req, res) => {
 				})
 			}
 		})
+	} else {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up"
+		})
 	}
 })
 
@@ -63,8 +69,17 @@ route.get("/member/", async (req, res) => {
  * Creates a new member
  */
 route.post("/member/", async (req, res) => {
-
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+		return
+	}
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -125,23 +140,28 @@ route.post("/member/", async (req, res) => {
 			sponsored_members: []
 		}
 
-		datalib.create("/members/", memid, content, async function (err) {
+		datalib.create("/members", memid, content, async function (err) {
 			if (!err) {
-				const member = await axios({
-					method: 'get',
-					headers: {
-						token_id: req.headers.token_id
-					},
-					url: host + "/member"
-				})
+				let member
+				try {
+					member = await axios({
+						method: 'get',
+						url: host + "/member/?token_id=" + req.params.token_id
+					})
+				} catch (err) {
+					res(400, {
+						status: "1",
+						error: "Haha! You Fucked Up"
+					})
+					return
+				}
 
 				member.data.sponsored_members = Array.isArray(member.data.sponsored_members) ? member.data.sponsored_members : []
-
-				console.log(member.data.sponsored_members)
 
 				member.data.sponsored_members.push(content.member_id)
 
 				datalib.update("/members/", smemid, member.data, function (err) {
+
 					if (err) {
 						res(500, {
 							status: "2",
@@ -158,8 +178,6 @@ route.post("/member/", async (req, res) => {
 				})
 			}
 		})
-
-
 	} else {
 		res(400, {
 			status: "1",
@@ -172,8 +190,16 @@ route.post("/member/", async (req, res) => {
  * Updates an already existing member
  */
 route.put("/member/", async (req, res) => {
-
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -194,6 +220,8 @@ route.put("/member/", async (req, res) => {
 
 
 	var bankname = typeof req.body.bankname == "string" ? req.body.bankname : false
+
+	var reciever = typeof req.body.reciever == "object" ? req.body.reciever : false
 
 	if (token_is_valid) {
 		datalib.read("members", memid, async function (err, content) {
@@ -231,6 +259,9 @@ route.put("/member/", async (req, res) => {
 				if (passwd) {
 					content.password = await bcrypt.hash(passwd, SALTROUNDS)
 				}
+				if (reciever) {
+					content.reciever = reciever
+				}
 
 				datalib.update("members", memid, content, function (err) {
 					if (err) {
@@ -262,7 +293,16 @@ route.put("/member/", async (req, res) => {
  * Updates an already existing member
  */
 route.get("/sponsored_members", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -299,7 +339,16 @@ route.get("/sponsored_members", async (req, res) => {
  * 
 */
 route.get("members", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -443,14 +492,14 @@ route.post("auth", async (req, res) => {
 
 	var isArgValid = memid && passwd
 
+
 	if (isArgValid) {
 		datalib.read("members", memid, async function (err, data) {
 			if (!err && data) {
 				data.password = typeof data.password == "string" ? data.password : ""
-				const password = await bcrypt.compare(passwd, data.password)
+				const validPassword = await bcrypt.compare(passwd, data.password)
 
-
-				if (password) {
+				if (validPassword) {
 					const token = await axios({
 						method: 'post',
 						url: host + "/token",
@@ -468,7 +517,6 @@ route.post("auth", async (req, res) => {
 							user: false
 						})
 					}
-
 				} else {
 					res(400, {
 						status: "1",
@@ -524,7 +572,6 @@ route.post("reset", (req, res) => {
 							error: "Sorry, I Fucked Up",
 						})
 					} else {
-						data.password = password
 						res(200, data)
 					}
 				})
@@ -556,7 +603,16 @@ route.post("product", async (req, res) => {
 	var price = typeof req.body.price == "number" ? req.body.price : false
 	var pv = typeof req.body.pv == "number" ? req.body.pv : false
 
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -594,7 +650,16 @@ route.post("product", async (req, res) => {
  * delete product
  */
 route.delete("product", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var product = typeof req.body.product == "string" ? req.body.product : false
 
@@ -630,7 +695,16 @@ route.delete("product", async (req, res) => {
  * retreive product product
  */
 route.get("product", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -669,8 +743,16 @@ route.get("product", async (req, res) => {
  * 
 */
 route.post("order", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
-
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
 	var member_id = typeof response.data.member_id == "string" ? response.data.member_id : false
@@ -714,7 +796,16 @@ route.post("order", async (req, res) => {
 })
 
 route.get("orders", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -735,7 +826,16 @@ route.get("orders", async (req, res) => {
 })
 
 route.put("order", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -788,7 +888,16 @@ route.put("order", async (req, res) => {
  * 
 */
 route.post("announcement", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -831,7 +940,16 @@ route.post("announcement", async (req, res) => {
 })
 
 route.get("announcement", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -872,7 +990,16 @@ route.get("announcement", async (req, res) => {
 })
 
 route.get("announcements", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -893,7 +1020,16 @@ route.get("announcements", async (req, res) => {
 })
 
 route.delete("announcement", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -935,7 +1071,16 @@ route.delete("announcement", async (req, res) => {
  * 
 */
 route.post("message", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -953,7 +1098,7 @@ route.post("message", async (req, res) => {
 
 		var content = {
 			message_id,
-			title,
+			member_id,
 			body,
 			date: helpers.getDate(new Date()),
 			statistics: 0
@@ -978,7 +1123,16 @@ route.post("message", async (req, res) => {
 })
 
 route.get("message", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -1019,7 +1173,16 @@ route.get("message", async (req, res) => {
 })
 
 route.get("messages", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 
@@ -1040,7 +1203,16 @@ route.get("messages", async (req, res) => {
 })
 
 route.delete("message", async (req, res) => {
-	const response = await axios.get(`http://localhost:2001/token?token_id=${req.headers.token_id}`)
+	let response
+	
+	try {
+		response = await axios.get(`http://localhost:2001/token?token_id=${req.params.token_id}`)
+	} catch (err) {
+		res(400, {
+			status: "1",
+			error: "Haha! You Fucked Up",
+		})
+	} 
 
 	var token_is_valid = response.data.expiration_time < Number(Date.now()) ? true : false
 

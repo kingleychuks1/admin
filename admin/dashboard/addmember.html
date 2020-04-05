@@ -108,7 +108,6 @@
             </div>
             <!--  side-nav-close -->
         </div>
-        <div class="switch-overlay"></div>
         <div class="main-content-wrap mobile-menu-content bg-off-white m-0">
             <header class="main-header bg-white d-flex justify-content-between p-2">
                 <div class="header-toggle">
@@ -146,73 +145,129 @@
 									</div>
 
 									<div class="input f-w-30">
-										<input type="text" id="mid" placeholder="Member ID">
+										<input type="text" id="memid" placeholder="Member ID" disabled>
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="lname" placeholder="Email">
+										<input type="text" id="email" placeholder="Email">
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="mname" placeholder="Address">
-									</div>
-
-									<div class="input f-w-30">
-										<input type="text" id="fname" placeholder="Phone Number">
-									</div>
-									<div class="input f-w-30">
-										<input type="text" id="lname" placeholder="Bank Name">
-									</div>
-									<div class="input f-w-30">
-										<input type="text" id="mname" placeholder="Account Name">
+										<input type="text" id="address" placeholder="Address">
 									</div>
 
 									<div class="input f-w-30">
-										<input type="text" id="fname" placeholder="Account Number">
+										<input type="text" id="telno" placeholder="Phone Number">
+									</div>
+									<div class="input f-w-30">
+										<input type="text" id="bankname" placeholder="Bank Name">
+									</div>
+									<div class="input f-w-30">
+										<input type="text" id="accname" placeholder="Account Name">
+									</div>
+
+									<div class="input f-w-30">
+										<input type="text" id="accno" placeholder="Account Number">
 									</div>
 									<div class="input f-w-30">
 										<select name="" id="country">
-											<option value="">Nigeria</option>
-											<option value="">Ghana</option>
-											<option value="">Niger</option>
+											<option value="Nigeria">Nigeria</option>
+											<option value="Ghana">Ghana</option>
+											<option value="Niger">Niger</option>
 										</select>
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="mname" placeholder="Sponsor's First Name">
+										<input type="text" id="sfname" placeholder="Sponsor's First Name">
 									</div>
 									
 
 									<div class="input f-w-30">
-										<input type="text" id="fname" placeholder="Sponsor's Last Name">
+										<input type="text" id="slname" placeholder="Sponsor's Last Name">
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="lname" placeholder="Sponsor's Member ID">
+										<input type="text" id="smemid" placeholder="Sponsor's Member ID" disabled>
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="mname" placeholder="Sponsor's Address">
+										<input type="text" id="saddress" placeholder="Sponsor's Address">
 									</div>
 
 
 									<div class="input f-w-30">
-										<input type="text" id="fname" placeholder="Bank Name">
+										<input type="text" id="sbankname" placeholder="Bank Name">
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="lname" placeholder="Account No">
+										<input type="text" id="saccno" placeholder="Account No">
 									</div>
 									<div class="input f-w-30">
-										<input type="text" id="mname" placeholder="Account Name">
+										<input type="text" id="saccname" placeholder="Account Name">
 									</div>
 								</div>
 
 								<div class="button-content">
 									<button>Register</button>
-									<button>Reset</button>
 								</div>
             </div>
-            
-            <div class="sidebar-overlay open"></div><!-- Footer Start -->
             <div class="flex-grow-1"></div>
             <!-- fotter end -->
         </div>
-    </div>
+		</div>
+		
+		<script src="../../dist-assets/custom/js/app.js"></script>
+		<script>
+			
+			var button = document.querySelector(".button-content button")
+
+			button.onclick = async function () {
+				var fname = document.querySelector("input#fname").value
+				var lname = document.querySelector("input#lname").value
+				var mname = document.querySelector("input#mname").value
+				var email = document.querySelector("input#email").value
+				var telno = document.querySelector("input#telno").value
+				var accno = document.querySelector("input#accno").value
+				var accname = document.querySelector("input#accname").value
+
+				var country = document.querySelector("select#country").value
+
+				var address = document.querySelector("input#address").value
+				var bankname = document.querySelector("input#bankname").value
+				var sfname = document.querySelector("input#sfname").value
+				var slname = document.querySelector("input#slname").value
+				var saccno = document.querySelector("input#saccno").value
+				var saccname = document.querySelector("input#saccname").value
+				var saddress = document.querySelector("input#saddress").value
+				var sbankname = document.querySelector("input#sbankname").value
+
+				var isArgValid = fname && lname && mname && email && telno && accno && accname && country
+												&& bankname && address && sfname && slname && saccno && saccname && saddress && sbankname
+
+				if(isArgValid) {
+					user = {
+						fname,
+						lname,
+						mname,
+						email,
+						telno,
+						accno,
+						accname,
+						country,
+						bankname,
+						address,
+						sfname,
+						slname,
+						saccno,
+						saccname,
+						saddress,
+						sbankname
+					}
+					
+					var user = await createOrUpdateUser(user, "create")
+
+					console.log(user)
+					// create user
+				} else {
+					// send an error
+				}
+			};
+
+		</script>
 
     <!-- Over the Page Pop up -->
     <div class="over-page-pop-up hide">

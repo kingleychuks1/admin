@@ -12,7 +12,11 @@ function server(req, res) {
 
 	var params = _url.query
 
-	var method = req.method.toLowerCase()
+	//var method = req.headers['access-control-request-method'] || req.method
+
+	var method = req.method
+	
+	method = typeof method == "string"? method.toLowerCase() : "PUT"
 
 	var headers = req.headers
 
@@ -30,7 +34,11 @@ function server(req, res) {
 		// eslint-disable-next-line no-undef
 		body = Buffer.concat(body).toString()
 
-		body = body.length > 1 ? JSON.parse(body) : {}
+		try {
+			body = body.length > 1 ? JSON.parse(body) : {}
+		} catch(err) {
+			body = {}
+		}
 
 		const request = {
 			path,
@@ -41,7 +49,6 @@ function server(req, res) {
 			body
 		}
 
-
 		var handler = route_handler[`_${method}`][path] || route_handler[`_get`].notfound
 
 		handler(request, function (statusCode, payload) {
@@ -50,8 +57,14 @@ function server(req, res) {
 
 			payload = JSON.stringify(payload)
 
-			res.setHeader("content-type", "application/json")
-			res.writeHead(statusCode)
+			headers = {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'PUT, DELETE, POST, GET',
+				'Access-Control-Max-Age': 2592000,
+				"content-type": "application/json"
+			}
+
+			res.writeHead(statusCode, headers)
 			res.end(payload)
 		})
 	})

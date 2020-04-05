@@ -85,8 +85,8 @@ class Helpers {
 	getDate(date) {
 		return {
 			date: date.getDate(),
-			Month: date.getMonth() + 1,
-			Year: date.getFullYear(),
+			month: date.getMonth() + 1,
+			year: date.getFullYear(),
 			hours: date.getHours(),
 			minutes: date.getMinutes(),
 			seconds: date.getSeconds()
