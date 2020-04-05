@@ -1098,7 +1098,7 @@ route.post("message", async (req, res) => {
 
 		var content = {
 			message_id,
-			title,
+			member_id,
 			body,
 			date: helpers.getDate(new Date()),
 			statistics: 0

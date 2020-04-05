@@ -107,7 +107,6 @@
 					</div>
 					<!--  side-nav-close -->
 			</div>
-			<div class="switch-overlay"></div>
 			<div class="main-content-wrap mobile-menu-content bg-off-white m-0">
 					<header class="main-header bg-white d-flex justify-content-between p-2">
 							<div class="header-toggle">
@@ -140,18 +139,18 @@
                                 <form>
                                     <div class="form-group">
                                         <label class="col-form-label" for="recipient-name-3">Member ID:</label>
-                                        <input class="form-control" id="recipient-name-3" type="text" />
+                                        <input class="form-control" id="memberid" type="text" />
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="message-text-2">New Message:</label>
-                                        <textarea class="form-control" id="message-text-2"></textarea>
+                                        <textarea class="form-control" id="message"></textarea>
                                     </div>
                               
                                 </form>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                                <button class="btn btn-primary" type="button">Submit</button>
+                                <button class="btn btn-primary" id="submit" type="button">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -186,188 +185,6 @@
 									<tbody>
 											<tr>
 													<td>
-															1
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															2
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															3
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															4
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															5
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															6
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															7
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															8
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															9
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															10
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															11
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															12
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
-															13
-													</td>
-													<td>
-															Samuel Omohan
-													</td>
-													<td>
-															3432
-													</td>
-													<td>
-															05/03/2020  16:43:34
-													</td>
-											</tr>
-											<tr>
-													<td>
 															14
 													</td>
 													<td>
@@ -389,6 +206,49 @@
 					<!-- fotter end -->
 			</div>
 	</div>
+	<script src="../../dist-assets/custom/js/app.js"></script>
+		<script>
+
+			var submit = document.querySelector("#submit")
+
+			submit.onclick = function () {
+				var memberid = document.querySelector("#memberid")
+				var message = document.querySelector("#message")
+			}
+
+			async function render() {
+				var response = await getRequest("announcements")
+				
+				load(response)
+			}
+
+			function load(data) {
+				tbody = document.querySelector("tbody")
+
+				var body = ""
+
+				for (var i = 0; i < data.length; i++) {
+					body += `<tr>
+											<td>
+													${i + 1}
+											</td>
+											<td>
+													<a href="#" data-toggle="modal" data-target="#verifyModalContent1" onclick="loadToggle(${data[i].announcement_id})" data-whatever="@fat">${data[i].body}</a>
+											</td>
+											<td>
+													${data[i].statistics}
+											</td>
+											<td>
+													${data[i].date.date + "/" + data[i].date.month + "/" + data[i].date.year + " " + data[i].date.hours + ":" + data[i].date.minutes + ":" + data[i].date.seconds }
+											</td>
+									</tr>`
+				}
+
+				tbody.innerHTML = body
+			}
+
+			render()
+		</script>
 
 	<!-- Over the Page Pop up -->
 	<div class="over-page-pop-up hide">
