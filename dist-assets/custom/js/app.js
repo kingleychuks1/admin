@@ -89,12 +89,35 @@ async function checkUserAuth() {
 
 	console.log("authenticated")
 
-	if (user) {
+	if (user && !user.status) {
 		return
 	} else {
 		console.log("unauthenticated")
 		window.location.href = "/signin.html"
 	}
+}
+
+async function getRequest(route) {
+	let token_id
+	try {
+		token_id = localStorage.getItem("token_id")
+	} catch (err) {
+		return null
+	}
+	
+	if (route.indexOf("?") >= 0) {
+		route = API + "/" + route + "&token_id=" + token_id
+	} else {
+		route = API + "/" + route + "?token_id=" + token_id
+	}
+	
+	var response = await fetch(route, {
+		method: "get"
+	})
+
+	response = await response.json()
+
+	return response
 }
 
 function throwError(contents) {
